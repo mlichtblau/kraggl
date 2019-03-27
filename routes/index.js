@@ -5,6 +5,7 @@ const SCOPES = ['board:write', 'user:read'];
 var express = require('express');
 var router = express.Router();
 var GloBoardApi = require('glo-board-api-node');
+var request = require('request-promise-native');
 
 const models = require('../models');
 const User = models.User;
@@ -67,6 +68,40 @@ router.get('/callback/oauth', function (req, res, next) {
 router.get('/logout', function (req, res, next) {
   req.logout();
   res.redirect('/');
+});
+
+/* let the user save his Toggl API key */
+router.get('/toggl', function (req, res, next) {
+  const user = req.user;
+  res.send('')
+});
+
+router.post('/toggl', function (req, res, next) {
+  const user = req.user;
+  const togglApiKey = req.body.togglApiKey;
+  request({
+    uri: 'https://www.toggl.com/api/v8/me',
+    json: true,
+    auth: {
+      username: togglApiKey,
+      password: 'api_token'
+    }
+  }).then(data => {
+    const togglUser = data.data;
+    user.togglApiKey = togglApiKey;
+    return user.save();
+  }).then(user => {
+    console.log(user);
+    res.send('blubber');
+  }).catch(error => {
+    if (error.statusCode === 403) {
+      // Wrong API Key
+      // TODO: Handle
+    } else {
+      next(error);
+    }
+  });
+  // user.save();
 });
 
 /* Display user profile */
