@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your boards</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+<h1>Hi <%= user.name %></h1>
+<p>Hier sind deine Boards:</p>
+<table>
+    <tr>
+        <th>Name</th>
+    </tr>
+    <% boards.forEach( function (board) { %>
+        <tr>
+            <td>
+                <%= board.name %>
+            </td>
+        </tr>
+    <% }); %>
+</table>
+</body>
+</html>

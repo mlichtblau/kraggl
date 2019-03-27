@@ -7,10 +7,15 @@ var router = express.Router();
 var GloBoardApi = require('glo-board-api-node');
 var request = require('request-promise-native');
 
+
+const getGloBoardApi = (accessToken) => {
+  const api = new GloBoardApi({ clientId: CLIENT_ID, clientSecret: CLIENT_SECRET });
+  api.setAccessToken(accessToken);
+  return api;
+};
+
 const models = require('../models');
 const User = models.User;
-
-const gloBoardApi = new GloBoardApi({ clientId: CLIENT_ID, clientSecret: CLIENT_SECRET });
 
 /* home page. */
 router.get('/', function (req, res, next) {
@@ -19,6 +24,7 @@ router.get('/', function (req, res, next) {
 
 /* Redirect to GitKraken */
 router.get('/login', function (req, res, next) {
+  const gloBoardApi = getGloBoardApi();
   const authorizeUrl = gloBoardApi.createAuthorizeURL(SCOPES, 'blubber');
   res.redirect(authorizeUrl);
 });
@@ -30,6 +36,7 @@ router.get('/callback/oauth', function (req, res, next) {
     res.status(400).send('Code missing');
     return;
   }
+  const gloBoardApi = getGloBoardApi();
   gloBoardApi.authorizationCodeGrant(code)
     .then(data => {
       const accessToken = data.body['access_token'];
@@ -91,7 +98,6 @@ router.post('/toggl', function (req, res, next) {
     user.togglApiKey = togglApiKey;
     return user.save();
   }).then(user => {
-    console.log(user);
     res.send('blubber');
   }).catch(error => {
     if (error.statusCode === 403) {
@@ -107,6 +113,20 @@ router.post('/toggl', function (req, res, next) {
 /* Display user profile */
 router.get('/me', function (req, res, next) {
   res.json(req.user);
+});
+
+router.get('/boards', function (req, res, next) {
+  const user = req.user;
+  const gloBoardApi = getGloBoardApi(req.user.gitKrakenAccessToken);
+  gloBoardApi.getBoards({
+    fields: ['name', 'columns', 'created_by', 'members']
+  }).then(boards => {
+    console.log(boards);
+    res.render('pages/boards', {
+      user,
+      boards
+    })
+  });
 });
 
 module.exports = router;
