@@ -120,8 +120,8 @@ router.get('/boards', function (req, res, next) {
   const gloBoardApi = getGloBoardApi(req.user.gitKrakenAccessToken);
   gloBoardApi.getBoards({
     fields: ['name', 'columns', 'created_by', 'members']
-  }).then(boards => {
-    console.log(boards);
+  }).then(data => {
+    const boards = data.body;
     res.render('pages/boards', {
       user,
       boards
