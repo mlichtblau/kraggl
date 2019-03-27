@@ -148,6 +148,9 @@ router.get('/boards/:boardId', function (req, res, enxt) {
         board
       })
   })
+    .catch(error => {
+      console.log(error);
+    })
 });
 
 module.exports = router;
