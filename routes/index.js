@@ -35,11 +35,25 @@ router.get('/callback/oauth', function (req, res, next) {
     .then(data => {
       const user = data.body;
       console.log(user);
-      res.json(user);
+      req.login(user, function (err) {
+        if (err) { return next(err); }
+        return res.redirect('/me');
+      });
     })
     .catch(error => {
       // TODO: Handle error
     })
+});
+
+/* Logout user */
+router.get('/logout', function (req, res, next) {
+  req.logout();
+  res.redirect('/');
+});
+
+/* Display user profile */
+router.get('/me', function (req, res, next) {
+  res.json(req.session);
 });
 
 module.exports = router;
