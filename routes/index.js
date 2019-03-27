@@ -80,7 +80,7 @@ router.get('/logout', function (req, res, next) {
 /* let the user save his Toggl API key */
 router.get('/toggl', function (req, res, next) {
   const user = req.user;
-  res.send('')
+  res.render('pages/toggl.ejs', { user });
 });
 
 router.post('/toggl', function (req, res, next) {
