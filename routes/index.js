@@ -53,7 +53,7 @@ router.get('/logout', function (req, res, next) {
 
 /* Display user profile */
 router.get('/me', function (req, res, next) {
-  res.json(req.session);
+  res.json(req.user);
 });
 
 module.exports = router;
