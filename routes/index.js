@@ -129,4 +129,25 @@ router.get('/boards', function (req, res, next) {
   });
 });
 
+router.get('/boards/:boardId', function (req, res, enxt) {
+  const user = req.user;
+  const boardId = req.params.boardId;
+  const gloBoardApi = getGloBoardApi(req.user.gitKrakenAccessToken);
+  Promise.all([
+    gloBoardApi.getBoard(boardId, {
+      fields: ['name', 'columns', 'members']
+    }),
+    gloBoardApi.getCardsOfBoard(boardId, {
+      fields: ['name', 'assignees', 'description', 'labels', 'column_id']
+    })])
+    .then(([boardData, cardsData]) => {
+      board = boardData.body;
+      cards = cardsData.body;
+      res.render('pages/board.ejs', {
+        cards,
+        board
+      })
+  })
+});
+
 module.exports = router;

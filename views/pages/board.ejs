@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your cards</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+<p>Hier sind deine Cards:</p>
+<table>
+    <tr>
+        <th>Name</th>
+    </tr>
+    <% cards.forEach( function (card) { %>
+        <tr>
+            <td>
+                <%= card.name %>
+            </td>
+        </tr>
+    <% }); %>
+</table>
+</body>
+</html>
