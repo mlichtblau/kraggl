@@ -1,21 +1,9 @@
-const CLIENT_ID = process.env.GIT_KRAKEN_CLIENT_ID;
-const CLIENT_SECRET = process.env.GIT_KRAKEN_CLIENT_SECRET;
-const SCOPES = ['board:write', 'user:read'];
+const express = require('express');
+const router = express.Router();
 
-var express = require('express');
-var router = express.Router();
-var GloBoardApi = require('glo-board-api-node');
-var request = require('request-promise-native');
-
-
-const getGloBoardApi = (accessToken) => {
-  const api = new GloBoardApi({ clientId: CLIENT_ID, clientSecret: CLIENT_SECRET });
-  api.setAccessToken(accessToken);
-  return api;
-};
-
-const models = require('../models');
-const User = models.User;
+const authController = require('../controllers/auth');
+const togglController = require('../controllers/toggl');
+const boardController = require('../controllers/board');
 
 /* home page. */
 router.get('/', function (req, res, next) {
@@ -23,134 +11,27 @@ router.get('/', function (req, res, next) {
 });
 
 /* Redirect to GitKraken */
-router.get('/login', function (req, res, next) {
-  const gloBoardApi = getGloBoardApi();
-  const authorizeUrl = gloBoardApi.createAuthorizeURL(SCOPES, 'blubber');
-  res.redirect(authorizeUrl);
-});
+router.get('/login', authController.login);
 
 /* Callback from GitKraken */
-router.get('/callback/oauth', function (req, res, next) {
-  const code = req.query.code || null;
-  if (code === null) {
-    res.status(400).send('Code missing');
-    return;
-  }
-  const gloBoardApi = getGloBoardApi();
-  gloBoardApi.authorizationCodeGrant(code)
-    .then(data => {
-      const accessToken = data.body['access_token'];
-      gloBoardApi.setAccessToken(accessToken);
-      gloBoardApi.getUser({ fields: ['id', 'name', 'username'] })
-        .then(data => {
-          const user = data.body;
-          User.findByPk(user.id)
-            .then(existingUser => {
-              if (!existingUser) {
-                return User.create({
-                  id: user.id,
-                  name: user.name,
-                  username: user.username,
-                  gitKrakenAccessToken: accessToken
-                });
-              } else {
-                return existingUser;
-              }
-            })
-            .then(newUser => {
-              req.login(newUser, function (err) {
-                if (err) { return next(err); }
-                return res.redirect('/me');
-              });
-            })
-            .catch(err => { return next(err) });
-        })
-    })
-    .catch(error => {
-      // TODO: Handle error
-    })
-});
+router.get('/callback/oauth', authController.gitKrakenCallback);
 
 /* Logout user */
-router.get('/logout', function (req, res, next) {
-  req.logout();
-  res.redirect('/');
-});
+router.get('/logout', authController.logout);
 
-/* let the user save his Toggl API key */
-router.get('/toggl', function (req, res, next) {
-  const user = req.user;
-  res.render('pages/toggl.ejs', { user });
-});
+/* let the user enter his Toggl API key */
+router.get('/toggl', togglController.toggl);
 
-router.post('/toggl', function (req, res, next) {
-  const user = req.user;
-  const togglApiKey = req.body.togglApiKey;
-  request({
-    uri: 'https://www.toggl.com/api/v8/me',
-    json: true,
-    auth: {
-      username: togglApiKey,
-      password: 'api_token'
-    }
-  }).then(data => {
-    const togglUser = data.data;
-    user.togglApiKey = togglApiKey;
-    return user.save();
-  }).then(user => {
-    res.redirect('/boards');
-  }).catch(error => {
-    if (error.statusCode === 403) {
-      // Wrong API Key
-      // TODO: Handle
-    } else {
-      next(error);
-    }
-  });
-  // user.save();
-});
+/* save the Toggl API key */
+router.post('/toggl', togglController.saveTogglApiKey);
 
-/* Display user profile */
-router.get('/me', function (req, res, next) {
-  res.json(req.user);
-});
+/* display the users boards */
+router.get('/boards', boardController.boards);
 
-router.get('/boards', function (req, res, next) {
-  const user = req.user;
-  const gloBoardApi = getGloBoardApi(req.user.gitKrakenAccessToken);
-  gloBoardApi.getBoards({
-    fields: ['name', 'columns', 'created_by', 'members']
-  }).then(data => {
-    const boards = data.body;
-    res.render('pages/boards', {
-      user,
-      boards
-    })
-  });
-});
+/* display a board */
+router.get('/boards/:boardId', boardController.board);
 
-router.get('/boards/:boardId', function (req, res, enxt) {
-  const user = req.user;
-  const boardId = req.params.boardId;
-  const gloBoardApi = getGloBoardApi(req.user.gitKrakenAccessToken);
-  Promise.all([
-    gloBoardApi.getBoard(boardId, {
-      fields: ['name', 'columns', 'members']
-    }),
-    gloBoardApi.getCardsOfBoard(boardId, {
-      fields: ['name', 'assignees', 'description', 'labels', 'column_id']
-    })])
-    .then(([boardData, cardsData]) => {
-      board = boardData.body;
-      cards = cardsData.body;
-      res.render('pages/board.ejs', {
-        cards,
-        board
-      })
-  })
-    .catch(error => {
-      console.log(error);
-    })
-});
+/* update board preferences */
+router.post('/boards/:boardId', boardController.saveBoard);
 
 module.exports = router;
