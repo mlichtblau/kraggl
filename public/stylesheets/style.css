@@ -82,6 +82,10 @@ h2{
 tr{
   white-space: nowrap;
 }
+
+tbody tr th, thead tr th:first-child{
+  text-align:left;
+}
 @media (max-width: 576px) {
   .kraggl{
     width: 300px;

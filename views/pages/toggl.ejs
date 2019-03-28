@@ -23,7 +23,7 @@
     <div class="col-md-4 d-none d-lg-block">
       <div class="card toggl-Signin" style="max-width: 18rem;">
       <div class="card-body">
-        <p class="card-text">Hi <em>Peter</em>!<br><!-- TODO: Username einsetzen-->
+        <p class="card-text">Hi <em><%= user.username %></em>!<br><!-- TODO: Username einsetzen-->
         You successfully connected to your GitKraken Account.</p>
         <img class="card-img" src="profilePicDub.png" alt="Card image">
       </div>
@@ -36,12 +36,18 @@
       <div class="card-body">
         <p class="card-text">Please connect <em>Kraggl</em> to your Toggl account in order to time track your work in an easy way.
         Unfortunately that is not as easy as connecting your GitKraken Account. Please go to the Desktop Version of your Toggl and copy your API key in the textfield below and press SAVE. Your API Key can be found if you scroll all the way down.</p>
+                <form class="" action="/toggl" method="post">
         <div class="input-group mb-3">
-  <input type="text" class="form-control" placeholder="Toggle API Key" aria-label="Toggle API Key" aria-describedby="basic-addon2">
-  <div class="input-group-append">
-    <a href="index.html" class="btn btn-danger">Connect</a>
-  </div>
-</div>
+
+            <input name="togglApiKey" type="text" class="form-control" placeholder="Toggl API Key" aria-label="Toggl API Key" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+              <button type="submit" name="button" class="btn btn-danger">
+                Connect
+              </button>
+          </div>
+      </div>
+    </form>
+
       </div>
     </div>
     </div>

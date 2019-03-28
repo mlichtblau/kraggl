@@ -98,7 +98,7 @@ router.post('/toggl', function (req, res, next) {
     user.togglApiKey = togglApiKey;
     return user.save();
   }).then(user => {
-    res.send('blubber');
+    res.redirect('/boards');
   }).catch(error => {
     if (error.statusCode === 403) {
       // Wrong API Key
