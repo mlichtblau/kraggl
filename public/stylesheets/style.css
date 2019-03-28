@@ -1,8 +1,97 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+body{
+  font-family: 'Poiret One', Helvetica, cursive;
+  font-size: 16px;
+  background: #0C0D38;
+  color: #CDECF4;
+  text-align: center;
 }
 
-a {
-  color: #00B7FF;
+em{
+  color: #F81880;
+  font-style: normal;
 }
+
+.card, .table-responsive{
+  background: transparent;
+  box-shadow: 0px 0px 40px 10px #F81894;
+}
+
+.table-responsive{
+  margin-bottom: 50px;
+  margin-top: 50px;
+}
+
+.btn-danger{
+  background-color: #F81870;
+  border: none;
+}
+
+.btn-danger:hover{
+  background-color: #F81894;}
+
+.landing{
+  margin-top: 50px;
+  text-align: center;
+}
+
+.navbar-brand {
+    position: absolute;
+    left: 10px;
+    top: 0px;
+}
+
+.navbar{
+  margin-bottom: 50px;
+}
+
+.nav-item{
+  color: #CDECF4;
+}
+
+.setup{
+  margin-top: auto;
+}
+
+.content{
+  margin-top: 110px;
+}
+
+.table{
+  color: #CDECF4;
+  background: transparent;
+}
+
+a{
+  color: #CDECF4;
+}
+
+a:hover{
+  text-decoration: none;
+  color: #8ed4e6;
+}
+
+.modal-content{
+  color: #0C0D38;
+  text-align: left;
+}
+
+h2{
+  margin-bottom: 30px;
+}
+
+tr{
+  white-space: nowrap;
+}
+@media (max-width: 576px) {
+  .kraggl{
+    width: 300px;
+    height: auto;
+  }
+}
+
+@media (max-width: 768px) {
+.kraggl{
+  padding-top: 50px;
+  width: 200px;
+  height:auto;
+  }}
