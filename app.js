@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var passport = require('./middleware/passport');
 var logger = require('morgan');
+var SQLiteStore = require('connect-sqlite3')(session);
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -20,9 +21,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({ secret: process.env.GIT_KRAKEN_CLIENT_SECRET }));
+app.use(session({
+  secret: process.env.GIT_KRAKEN_CLIENT_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  store: new SQLiteStore({
+    db: 'database.sqlite3',
+    dir: 'database'
+  }),
+}));
 app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.session({
+  secret: process.env.GIT_KRAKEN_CLIENT_SECRET,
+}));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
