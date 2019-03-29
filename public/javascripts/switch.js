@@ -22,16 +22,6 @@ $('#saveModalChanges').click(function() {
   });
 });
 
-$(function(){
-  $(".dropdown-menu a.dropdown-item ").click(function(){
-
-      $("#dropdownMenuButton:first-child").text($(this).text());
-      $("#dropdownMenuButton:first-child").val($(this).text());
-
-   });
-
-});
-
 $('#settingsModal').on('hidden.bs.modal', function(){
     $(this).find('form')[0].reset();
 });

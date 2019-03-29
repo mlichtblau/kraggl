@@ -102,21 +102,19 @@
                             </div>
                         <% }); %>
                         <hr>
-                        <div class="dropdown">
-                          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" name="togglProjectId"> Choose Toggl Project  </button>
-                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <div class="form-group">
+                          <label for="ProjectId">Choose Toggl Project</label>
+                          <select class="form-control" id="ProjectId" name="togglProjectId">
                             <% workspaces.forEach(function(workspace, index){ %>
-                              <h6 class="dropdown-header"><%= workspace.name %></h6>
+                              <optgroup label="<%= workspace.name%>">
                               <% if(workspace.projects){
                                   workspace.projects.forEach(function(project){
                                   %>
-                                  <a class="dropdown-item" href="#"><%= project.name %></a>
+                                  <option value="<%= project.id%>" <%
+                                    if(board.togglProjectId===project.id){%>selected<%} %>><%= project.name %></option>
                                   <%
-                                });
-                                if(index !== workspaces.length-1){%>
-                                <div class="dropdown-divider"></div>
-                              <%}}}); %>
-                          </div>
+                                });}}); %>
+                          </select>
                         </div>
                     </div>
                 </div>
