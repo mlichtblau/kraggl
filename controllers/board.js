@@ -93,8 +93,9 @@ const saveBoard = function (req, res, next) {
   const formData = req.body;
   const trackingEnabled = !!formData.trackingEnabled;
   const togglProjectId = formData.togglProjectId;
-  // const trackedColumns = formData.trackedColumns;
-  const trackedColumns = ['5ba25f2c8586640e0055a455'];
+  const trackedColumns = formData.trackedColumns;
+  console.log(formData['trackedColumns']);
+  //const trackedColumns = ['5ba25f2c8586640e0055a455'];
   const chatbotEnabled = !!formData.chatbotEnabled;
   Board.findByPk(boardId, {
     include: [{

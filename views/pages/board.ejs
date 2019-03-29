@@ -35,9 +35,9 @@
             <thead>
             <tr>
                 <th scope="col">Title</th>
-                <!-- TODO: Insert Tracked Columns-->
-                <th scope="col">In Progress</th>
-                <th scope="col">In Review</th>
+                <% board.trackedColumns.forEach( function (column, index) { %>
+                  <th scope="col"><%= column.name %></th>
+                <% }); %>
                 <th scope="col">Total time</th>
             </tr>
             </thead>
@@ -96,9 +96,9 @@
                         <label>Select Columns to Track</label>
                         <% board.columns.forEach( function (column, index) { %>
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="customCheck<%= index %>" value="<%= column.id %>" name="columns[]">
+                                <input type="checkbox" class="custom-control-input" id="customCheck<%= index %>" value="<%= column.id %>" name="trackedColumns[]" <%if (board.trackedColumns.includes(column.id)){%>checked="checked"<% } %>>
                                 <label class="custom-control-label"
-                                       for="customCheck<%= index %>"><%= column.name %></label>
+                                       for="customCheck<%= index %>"> <%= column.name %></label>
                             </div>
                         <% }); %>
                         <hr>
