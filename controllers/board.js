@@ -40,8 +40,24 @@ const boards = function (req, res, next) {
 
 const board = function (req, res, next) {
   const user = req.user;
+  let board;
+  let cards;
   const boardId = req.params.boardId;
   const gloBoardApi = getGloBoardApi(req.user.gitKrakenAccessToken);
+
+  const getProjectsForWorkspace = (workspace) => {
+    return new Promise(function (resolve, reject) {
+      user.togglClient.getWorkspaceProjects(workspace.id, {}, function (error, projects) {
+        if (error) reject(error);
+        resolve({
+          id: workspace.id,
+          name: workspace.name,
+          projects
+        })
+      })
+    });
+  };
+
   Promise.all([
     gloBoardApi.getBoard(boardId, {
       fields: ['name', 'columns', 'members']
@@ -50,15 +66,24 @@ const board = function (req, res, next) {
       fields: ['name', 'assignees', 'description', 'labels', 'column_id']
     })])
     .then(([boardData, cardsData]) => {
-      const board = boardData.body;
-      const cards = cardsData.body;
-      res.render('pages/board.ejs', {
-        cards,
-        board
-      })
+      board = boardData.body;
+      cards = cardsData.body;
+
+      return new Promise(function (resolve, reject) {
+        user.togglClient.getWorkspaces((error, workspaces) => {
+          if (error) reject(error);
+          return workspaces;
+        });
+      });
     })
+    .then(workspaces => workspaces.map(workspace => getProjectsForWorkspace(workspace)))
+    .then(workspacesWithProjects => res.render('pages/board.ejs', {
+            cards,
+            board,
+            workspaces: workspacesWithProjects
+          }))
     .catch(error => {
-      console.log(error);
+      next(error);
     })
 };
 
