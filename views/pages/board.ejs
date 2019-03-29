@@ -16,7 +16,7 @@
 <%- include ../partials/header.ejs %>
 
 <div class="container">
-    <h2>Board XYZ</h2> <!-- TODO: include board name -->
+    <h2><%= board.name %></h2>
 
     <div class="row align-items-center">
         <div class="col">
@@ -25,7 +25,7 @@
         <div class="col">
         </div>
         <div class="col">
-            <a class="btn" data-toggle="modal" data-target="#exampleModalCenter" role="button">&#9881;Settings</a>
+            <a class="btn" data-toggle="modal" data-target="#settingsModal" role="button" id="settings">&#9881;Settings</a>
         </div>
     </div>
 
@@ -35,6 +35,7 @@
             <thead>
             <tr>
                 <th scope="col">Title</th>
+                <!-- TODO: Insert Tracked Columns-->
                 <th scope="col">In Progress</th>
                 <th scope="col">In Review</th>
                 <th scope="col">Total time</th>
@@ -62,48 +63,66 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+<div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="settingsModalTitle"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <form action="/boards/<%= board.id %>" method="post">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">Board Settings</h5>
+                    <h5 class="modal-title" id="settingsModalTitle">Board Settings</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input" id="customSwitch1" name="trackingEnabled">
-                        <label class="custom-control-label" for="customSwitch1">Timetrack this board</label>
+                        <input type="checkbox" class="custom-control-input" id="switchTracking" name="trackingEnabled"<% if (board.trackingEnabled) { %>
+                          checked="checked"
+                        <% } %>  >
+                        <label class="custom-control-label" for="switchTracking">Timetrack this board</label>
                     </div>
-                    <div id="onlyonactive" style="display: none;">
+
+
+                    <div id="onlyonactive">
                         <hr>
+
                         <div class="custom-control custom-switch">
                             <input type="checkbox" class="custom-control-input" id="customSwitch2" name="chatbotEnabled">
                             <label class="custom-control-label" for="customSwitch2">Enable Chatbot</label>
                         </div>
+
                         <hr>
+
                         <label>Select Columns to Track</label>
                         <% board.columns.forEach( function (column, index) { %>
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="customCheck<%= index %>">
+                                <input type="checkbox" class="custom-control-input" id="customCheck<%= index %>" value="<%= column.id %>" name="columns[]">
                                 <label class="custom-control-label"
                                        for="customCheck<%= index %>"><%= column.name %></label>
                             </div>
                         <% }); %>
                         <hr>
-                        <div class="form-group">
-                            <label for="exampleFormControlInput1">Toggl Project</label>
-                            <input type="text" class="form-control" id="exampleFormControlInput1"
-                                   placeholder="Your desired Toggl Project Name" name="togglProjectId">
+                        <div class="dropdown">
+                          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" name="togglProjectId"> Choose Toggl Project  </button>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <% workspaces.forEach(function(workspace, index){ %>
+                              <h6 class="dropdown-header"><%= workspace.name %></h6>
+                              <% if(workspace.projects){
+                                  workspace.projects.forEach(function(project){
+                                  %>
+                                  <a class="dropdown-item" href="#"><%= project.name %></a>
+                                  <%
+                                });
+                                if(index !== workspaces.length-1){%>
+                                <div class="dropdown-divider"></div>
+                              <%}}}); %>
+                          </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-danger">Save changes</button>
+                    <button type="submit" class="btn btn-danger" id="saveModalChanges">Save changes</button>
                 </div>
             </form>
         </div>
