@@ -44,6 +44,13 @@ module.exports = (sequelize, DataTypes) => {
 
   /* Instance Methods */
 
+  User.prototype.getBoardWithId = function (gloBoardId) {
+    return this.getBoards({
+      where: { id: gloBoardId },
+      include: { model: sequelize.models.Column }
+    }).then(([kragglBoard]) => kragglBoard);
+  };
+
   User.prototype.startTimerForCard = function (card, projectId) {
     return new Promise((resolve, reject) => {
       this.togglClient.startTimeEntry({

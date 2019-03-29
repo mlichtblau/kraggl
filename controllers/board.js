@@ -30,8 +30,7 @@ const boards = function (req, res, next) {
 
 const board = function (req, res, next) {
   const user = req.user;
-  let board;
-  let cards;
+  let board, cards, workspaces;
   const boardId = req.params.boardId;
   const gloBoardApi = user.gloBoardApi;
 
@@ -77,11 +76,36 @@ const board = function (req, res, next) {
       });
     })
     .then(workspaces => Promise.all(workspaces.map(workspace => getProjectsForWorkspace(workspace))))
-    .then(workspacesWithProjects => res.render('pages/board.ejs', {
+    .then(workspacesWithProjects => {
+      workspaces = workspacesWithProjects;
+      return new Promise(function (resolve, reject) {
+        if (!board.trackingEnabled) resolve();
+        else {
+          const projects = [];
+          workspaces.map(workspace => {
+            projects.push(...workspace.projects);
+          });
+          const currentProject = projects.find(project => project.id = board.togglProjectId);
+          console.log('wid ' + currentProject.wid);
+          user.togglClient.detailedReport({
+            workspace_id: currentProject.wid,
+            user_agent: 'kraggl',
+            project_ids: currentProject.id,
+          }, (error, report) => {
+            if (error) reject(error);
+            resolve(report);
+          });
+        }
+      })
+    })
+    .then(report => {
+      console.log(report);
+      res.render('pages/board.ejs', {
         cards,
         board,
-        workspaces: workspacesWithProjects
-      }))
+        workspaces
+      })
+    })
     .catch(error => {
       next(error);
     })
