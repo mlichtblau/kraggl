@@ -65,6 +65,10 @@ const board = function (req, res, next) {
       board = kragglBoard ? { ...gloBoard, ...kragglBoard.dataValues } : gloBoard;
       cards = cardsData.body;
 
+      if (board.Columns) {
+        board.selectedColumns = board.Columns.map(col => col.dataValues);
+      }
+
       return new Promise(function (resolve, reject) {
         user.togglClient.getWorkspaces((error, workspaces) => {
           if (error) reject(error);
