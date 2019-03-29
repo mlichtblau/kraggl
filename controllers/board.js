@@ -1,19 +1,9 @@
-const CLIENT_ID = process.env.GIT_KRAKEN_CLIENT_ID;
-const CLIENT_SECRET = process.env.GIT_KRAKEN_CLIENT_SECRET;
-
-const GloBoardApi = require('glo-board-api-node');
-const getGloBoardApi = (accessToken) => {
-  const api = new GloBoardApi({ clientId: CLIENT_ID, clientSecret: CLIENT_SECRET });
-  api.setAccessToken(accessToken);
-  return api;
-};
-
 const models = require('../models');
 const Board = models.Board;
 
 const boards = function (req, res, next) {
   const user = req.user;
-  const gloBoardApi = getGloBoardApi(req.user.gitKrakenAccessToken);
+  const gloBoardApi = user.gloBoardApi;
   Promise.all([
     gloBoardApi.getBoards({
       fields: ['name', 'columns', 'created_by', 'members']
@@ -42,7 +32,7 @@ const board = function (req, res, next) {
   let board;
   let cards;
   const boardId = req.params.boardId;
-  const gloBoardApi = getGloBoardApi(req.user.gitKrakenAccessToken);
+  const gloBoardApi = user.gloBoardApi;
 
   const getProjectsForWorkspace = (workspace) => {
     return new Promise(function (resolve, reject) {
@@ -77,7 +67,7 @@ const board = function (req, res, next) {
         });
       });
     })
-    .then(workspaces => workspaces.map(workspace => getProjectsForWorkspace(workspace)))
+    .then(workspaces => Promise.all(workspaces.map(workspace => getProjectsForWorkspace(workspace))))
     .then(workspacesWithProjects => res.render('pages/board.ejs', {
         cards,
         board,
