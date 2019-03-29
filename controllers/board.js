@@ -30,7 +30,6 @@ const boards = function (req, res, next) {
       if (!kragglBoard) return gloBoard;
       else return {...gloBoard, ...kragglBoard.dataValues };
     });
-    console.log(mergedBoards);
     res.render('pages/boards', {
       user,
       boards: mergedBoards
@@ -62,26 +61,28 @@ const board = function (req, res, next) {
     gloBoardApi.getBoard(boardId, {
       fields: ['name', 'columns', 'members']
     }),
+    Board.findByPk(boardId),
     gloBoardApi.getCardsOfBoard(boardId, {
       fields: ['name', 'assignees', 'description', 'labels', 'column_id']
     })])
-    .then(([boardData, cardsData]) => {
-      board = boardData.body;
+    .then(([gloBoardData, kragglBoard, cardsData]) => {
+      const gloBoard = gloBoardData.body;
+      board = kragglBoard ? { ...gloBoard, ...kragglBoard.dataValues } : gloBoard;
       cards = cardsData.body;
 
       return new Promise(function (resolve, reject) {
         user.togglClient.getWorkspaces((error, workspaces) => {
           if (error) reject(error);
-          return workspaces;
+          resolve(workspaces);
         });
       });
     })
     .then(workspaces => workspaces.map(workspace => getProjectsForWorkspace(workspace)))
     .then(workspacesWithProjects => res.render('pages/board.ejs', {
-            cards,
-            board,
-            workspaces: workspacesWithProjects
-          }))
+        cards,
+        board,
+        workspaces: workspacesWithProjects
+      }))
     .catch(error => {
       next(error);
     })

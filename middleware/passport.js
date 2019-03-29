@@ -21,7 +21,6 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(id, done) {
   User.findByPk(id)
     .then(user => {
-      console.log(user.dataValues);
       user.gloBoardApi = getGloBoardApi(user.gitKrakenAccessToken);
       if (user.togglApiKey) {
         user.togglClient = new TogglClient({ apiToken: user.togglApiKey });
