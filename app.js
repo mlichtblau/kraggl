@@ -3,9 +3,12 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
-var passport = require('./middleware/passport');
 var logger = require('morgan');
 var SQLiteStore = require('connect-sqlite3')(session);
+var passport = require('passport');
+var authHelper = require('./helpers/auth');
+passport.serializeUser(authHelper.serializeUser);
+passport.deserializeUser(authHelper.deserializeUser);
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
