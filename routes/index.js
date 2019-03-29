@@ -4,6 +4,7 @@ const router = express.Router();
 const authController = require('../controllers/auth');
 const togglController = require('../controllers/toggl');
 const boardController = require('../controllers/board');
+const gloController = require('../controllers/glo');
 
 /* home page. */
 router.get('/', function (req, res, next) {
@@ -33,5 +34,8 @@ router.get('/boards/:boardId', boardController.board);
 
 /* update board preferences */
 router.post('/boards/:boardId', boardController.saveBoard);
+
+/* provide glo board hook */
+router.post('/glo/hook', gloController.hook);
 
 module.exports = router;
