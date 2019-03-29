@@ -91,6 +91,10 @@ tbody tr th, thead tr th:first-child{
   text-align:left;
 }
 
+h3{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 
 
 

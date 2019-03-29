@@ -19,7 +19,7 @@
 <%- include ../partials/header.ejs %>
 
 <div class="container">
-    <h2><%= board.name %></h2>
+    <h2><em><%= board.name %></em></h2>
 
     <div class="row align-items-center">
         <div class="col">
@@ -38,9 +38,10 @@
           <thead>
           <tr>
               <th scope="col">Title</th>
-              <% board.trackedColumns.forEach( function (column, index) { %>
+              <% board.columns.forEach( function (column) {
+                if(board.trackedColumns.includes(column.id)){%>
                 <th scope="col"><%= column.name %></th>
-              <% }); %>
+              <% }}); %>
               <th scope="col">Total time</th>
           </tr>
           </thead>
@@ -59,12 +60,7 @@
       </table>
   </div>
 </div>
-
-
-
-    <p>The time you spend on a card in a specific column is displayed in the first line, whilst the second line
-        indicates the team overall.</p>
-
+         <p>Your personal time is displayed in the first line, whilst the second line indicates the team overall.</p>
 </div>
 
 <!-- Modal -->
