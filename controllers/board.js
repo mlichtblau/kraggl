@@ -1,5 +1,6 @@
 const models = require('../models');
 const Board = models.Board;
+const Column = models.Column;
 
 const boards = function (req, res, next) {
   const user = req.user;
@@ -84,15 +85,38 @@ const saveBoard = function (req, res, next) {
   const formData = req.body;
   const trackingEnabled = !!formData.trackingEnabled;
   const togglProjectId = formData.togglProjectId;
+  const trackedColumns = formData.trackedColumns;
   const chatbotEnabled = !!formData.chatbotEnabled;
-  Board.findByPk(boardId)
+  Board.findByPk(boardId, {
+    include: [{
+      model: Column
+    }]
+  })
     .then(board => {
       if (board) {
-        return board.update({
+        board.update({
           trackingEnabled,
           togglProjectId,
           chatbotEnabled
         });
+        let columns = board.Columns.slice();
+        let $newColumns = [];
+        trackedColumns.forEach(trackedColumnId => {
+          const index = columns.findIndex(col => {
+            return col.id === trackedColumnId;
+          });
+          if (index > -1) {
+            columns.splice(index, 1);
+          } else {
+            $newColumns.push(Column.create({
+              id: trackedColumnId,
+              boardId: board.id
+            }));
+          }
+        });
+        const $deletedColumns = columns.map(column => column.destroy());
+        return Promise.all([...$newColumns, ...$deletedColumns])
+          .then(_ => board.update());
       } else {
         return Board.create({
           id: boardId,
@@ -100,6 +124,14 @@ const saveBoard = function (req, res, next) {
           togglProjectId,
           chatbotEnabled,
           userId: user.id
+        }).then(board => {
+          $columns = trackedColumns.map(columnId => {
+            return Column.create({
+              id: columnId,
+              boardId: board.id
+            });
+          });
+          return Promise.all($columns).then(columns => board.update());
         })
       }
     })
