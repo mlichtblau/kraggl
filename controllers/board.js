@@ -52,7 +52,11 @@ const board = function (req, res, next) {
     gloBoardApi.getBoard(boardId, {
       fields: ['name', 'columns', 'members']
     }),
-    Board.findByPk(boardId),
+    Board.findByPk(boardId, {
+      include: {
+        model: Column,
+      }
+    }),
     gloBoardApi.getCardsOfBoard(boardId, {
       fields: ['name', 'assignees', 'description', 'labels', 'column_id']
     })])
