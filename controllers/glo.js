@@ -5,37 +5,37 @@ const User = models.User;
 const Board = models.Board;
 const Column = models.Column;
 
+const isColumnTracked = (columnId, board) => {
+  return board.Columns.map(col => col.id).includes(columnId);
+};
+
 const handleMovedColumn = function (gloBoard, card, user) {
   user.getBoards({
-    where: {
-      id: gloBoard.id
-    },
-    include: {
-      model: Column
-    }
-  })
-    .then(kragglBoards => {
-      if (kragglBoards && kragglBoards[0]) {
-        let kragglBoard = kragglBoards[0];
-        if (kragglBoard.Columns.map(col => col.id).includes(card.column_id)) {
-          user.togglClient.startTimeEntry({
-            pid: kragglBoard.togglProjectId,
-            description: card.name,
-            tags: ['Kraggl'],
-            created_with: 'Kraggl'
-          }, (error, timeEntry) => {
-            console.log(timeEntry);
-          });
-          console.log('Column is tracked!');
-        } else {
-          console.log('Column is not tracked!');
-        }
+    where: { id: gloBoard.id },
+    include: { model: Column }
+  }).then(([kragglBoard]) => {
+    if (kragglBoard) {
+      if (isColumnTracked(card.column_id, kragglBoard))  {
+        // Case: Column is tracked
+        return user.startTimerForCard(card, kragglBoard.togglProjectId)
+          .then(timeEntry => console.log(`Started Time Entry with ID: ${ timeEntry.id }`))
+      } else {
+        // Case: Column is not tracked
+        return user.getCurrentTimeEntry()
+          .then(timeEntry => {
+            if (timeEntry && timeEntry.tags.includes(card.id)) {
+              return user.stopTimeEntry(timeEntry.id)
+            }
+          })
+          .then(stoppedTimeEntry => {
+            if (stoppedTimeEntry) console.log(`Stopped Time Entry with ID: ${ stoppedTimeEntry.id }`);
+            else console.log('No timer running for this card');
+          })
       }
-    })
-    .catch(error => {
-      console.log(error);
-    });
-  console.log(`Moved card: ${ card.name } to column with id: ${ card.column_id }`);
+    }
+  }).catch(error => {
+    console.log(error);
+  });
 };
 
 const handleCardEvent = function ({ action, board, card, sequence }, user) {
