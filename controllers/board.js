@@ -66,7 +66,7 @@ const board = function (req, res, next) {
       cards = cardsData.body;
 
       if (board.Columns) {
-        board.selectedColumns = board.Columns.map(col => col.dataValues);
+        board.trackedColumns = board.Columns.map(col => col.dataValues.id);
       }
 
       return new Promise(function (resolve, reject) {
