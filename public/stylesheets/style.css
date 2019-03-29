@@ -11,14 +11,18 @@ em{
   font-style: normal;
 }
 
-.card, .table-responsive{
+.card{
   background: transparent;
   box-shadow: 0px 0px 40px 10px #F81894;
 }
 
-.table-responsive{
+.table-card{
   margin-bottom: 50px;
   margin-top: 50px;
+}
+
+.table-responsive{
+  background: transparent;
 }
 
 .btn-danger{

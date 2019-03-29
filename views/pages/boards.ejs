@@ -11,7 +11,7 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    
+
     <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
 <body>
@@ -21,34 +21,37 @@
 
   <h2>Welcome <em><%= user.username %></em></h2>
   <p>Here is an overview of all your GloBoards. If you've already started tracking your time with <em>Kraggl</em>, the overall times tracked for your boards will be displayed here. Click on a Boardname or "<i>See Details</i>" for a closer look at a particular board</p>
-  <div class="table-responsive">
-    <table class="table table-striped table-dark">
-      <thead>
-      <tr>
-        <th scope="col">Board Name</th>
-        <th scope="col">Personal Time Tracked</th>
-        <th scope="col">Team Time Tracked</th>
-        <th scope="col">Tracking?</th>
-        <th scope="col"></th>
-      </tr>
-    </thead>
-      <tbody>
-    <% boards.forEach( function (board) { %>
-      <tr><!--TODO: fix times-->
-        <th scope="row"><a href="/boards/<%= board.id %>"><%= board.name %></a></th>
-        <td>03:02:42</td>
-        <td>03:22:42</td>
-        <% if (board.trackingEnabled) { %>
-          <td>Tracking</td>
-        <% } else { %>
-          <td>Not tracking</td>
-        <% } %>
-        <td><a href="/boards/<%= board.id %>">See Details &raquo;</a></td>
-      </tr>
-    <% }); %>
-  </tbody>
-  </table>
+  <div class="card table-card">
+    <div class="table-responsive">
+      <table class="table table-striped table-dark">
+        <thead>
+        <tr>
+          <th scope="col">Board Name</th>
+          <th scope="col">Personal Time Tracked</th>
+          <th scope="col">Team Time Tracked</th>
+          <th scope="col">Tracking?</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+        <tbody>
+      <% boards.forEach( function (board) { %>
+        <tr><!--TODO: fix times-->
+          <th scope="row"><a href="/boards/<%= board.id %>"><%= board.name %></a></th>
+          <td>03:02:42</td>
+          <td>03:22:42</td>
+          <% if (board.trackingEnabled) { %>
+            <td>Tracking</td>
+          <% } else { %>
+            <td>Not tracking</td>
+          <% } %>
+          <td><a href="/boards/<%= board.id %>">See Details &raquo;</a></td>
+        </tr>
+      <% }); %>
+    </tbody>
+    </table>
+    </div>
   </div>
+
 
 
 

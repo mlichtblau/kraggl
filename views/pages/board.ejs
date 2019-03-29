@@ -32,32 +32,34 @@
         </div>
     </div>
 
+<div class="card table-card">
+  <div class="table-responsive">
+      <table class="table table-striped table-dark">
+          <thead>
+          <tr>
+              <th scope="col">Title</th>
+              <% board.trackedColumns.forEach( function (column, index) { %>
+                <th scope="col"><%= column.name %></th>
+              <% }); %>
+              <th scope="col">Total time</th>
+          </tr>
+          </thead>
+          <tbody>
 
-    <div class="table-responsive">
-        <table class="table table-striped table-dark">
-            <thead>
-            <tr>
-                <th scope="col">Title</th>
-                <% board.trackedColumns.forEach( function (column, index) { %>
-                  <th scope="col"><%= column.name %></th>
-                <% }); %>
-                <th scope="col">Total time</th>
-            </tr>
-            </thead>
-            <tbody>
+          <% cards.forEach( function (card) { %>
+              <!-- TODO: include times -->
+              <tr>
+                  <th scope="row"><%= card.name %></th>
+                  <td>03:02:42 <br> 03:22:42</td>
+                  <td>03:22:42 <br> 03:22:42</td>
+                  <td>06:25:24 <br> 03:42:42</td>
+              </tr>
+          <% }); %>
+          </tbody>
+      </table>
+  </div>
+</div>
 
-            <% cards.forEach( function (card) { %>
-                <!-- TODO: include times -->
-                <tr>
-                    <th scope="row"><%= card.name %></th>
-                    <td>03:02:42 <br> 03:22:42</td>
-                    <td>03:22:42 <br> 03:22:42</td>
-                    <td>06:25:24 <br> 03:42:42</td>
-                </tr>
-            <% }); %>
-            </tbody>
-        </table>
-    </div>
 
 
     <p>The time you spend on a card in a specific column is displayed in the first line, whilst the second line
