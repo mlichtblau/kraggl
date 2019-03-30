@@ -1,4 +1,4 @@
-body{
+body {
   font-family: 'Open Sans', sans-serif;
   font-size: 16px;
   background: #0C0D38;
@@ -6,116 +6,101 @@ body{
   text-align: center;
 }
 
-em{
+em {
   color: #F81880;
   font-style: normal;
 }
 
-.card{
+.card {
   background: transparent;
   box-shadow: 0px 0px 40px 10px #F81894;
 }
 
-.btn-primary{
+.btn-primary {
   background-color: #F81870;
   border: none;
 }
 
-.btn-primary:hover{
+.btn-primary:hover {
   background-color: #F81894;
 }
 
-/* === Index === */
-
-.index-container{
-  margin-top: 50px;
-}
-
-/* === Toggl === */
-
-.toggl-container{
-  margin-top: 110px;
-}
-
-
-.table-card{
-  margin-bottom: 50px;
-  margin-top: 50px;
-}
-
-.table-responsive{
-  background: transparent;
-}
-
-.navbar-brand {
-    position: absolute;
-    left: 10px;
-    top: 0px;
-}
-
-.navbar{
-  margin-bottom: 50px;
-}
-
-.nav-item{
+a {
   color: #CDECF4;
 }
 
-.setup{
-  margin-top: auto;
-}
-
-
-
-.table{
-  color: #CDECF4;
-  background: transparent;
-}
-
-a{
-  color: #CDECF4;
-}
-
-a:hover{
+a:hover {
   text-decoration: none;
   color: #8ed4e6;
 }
 
-.modal-content{
-  color: #0C0D38;
-  text-align: left;
-}
-
-h2{
+h2 {
   margin-bottom: 30px;
 }
 
-tr{
-  white-space: nowrap;
-}
-
-tbody tr th, thead tr th:first-child{
-  text-align:left;
-}
-
-h3{
+h3 {
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
+/* === Rounded Corner Table === */
+.table-card {
+  margin-bottom: 50px;
+  margin-top: 50px;
+}
 
+.table {
+  color: #CDECF4;
+  background: transparent;
+}
 
+tr {
+  white-space: nowrap;
+}
 
+tbody tr th, thead tr th:first-child {
+  text-align: left;
+}
+
+/* === Index === */
+.index-container {
+  margin-top: 50px;
+}
+
+/* === Navbar === */
+.navbar {
+  margin-bottom: 50px;
+}
+
+.navbar-brand {
+  position: absolute;
+  left: 10px;
+  top: 0px;
+}
+
+/* === Toggl === */
+.toggl-container {
+  margin-top: 110px;
+}
+
+/* === Settings Modal === */
+.modal-content {
+  color: #0C0D38;
+  text-align: left;
+}
+
+/* === Media Queries === */
 @media (max-width: 576px) {
-  .kraggl{
+  .kraggl {
     width: 300px;
     height: auto;
   }
 }
 
 @media (max-width: 768px) {
-.kraggl{
-  padding-top: 50px;
-  width: 200px;
-  height:auto;
-  }}
+  .kraggl {
+    padding-top: 50px;
+    width: 200px;
+    height: auto;
+  }
+}
