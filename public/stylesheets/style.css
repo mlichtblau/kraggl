@@ -31,7 +31,15 @@ a {
 
 a:hover {
   text-decoration: none;
+  color: #b8e4ef;
+}
+
+a.highlighted-link{
   color: #8ed4e6;
+}
+
+a.highlighted-link:hover{
+  color: #b8e4ef;
 }
 
 h2 {

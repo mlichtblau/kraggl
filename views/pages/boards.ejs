@@ -20,30 +20,27 @@
           <thead>
             <tr>
               <th scope="col">Board</th>
-              <th scope="col">Personal Time</th>
+              <th scope="col">Total Time</th>
               <th scope="col">Tracking?</th>
-              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
             <% boards.forEach( function (board) { %>
             <tr>
-              <!--TODO: fix times-->
-              <th scope="row"><a href="/boards/<%= board.id %>"><%= board.name %></a></th>
+              <th scope="row"><a class="highlighted-link" href="/boards/<%= board.id %>"><%= board.name %></a></th>
               <td><%= board.totalTime %></td>
               <% if (board.trackingEnabled) { %>
               <td>&#9989;</td>
               <% } else { %>
               <td>&#10060;</td>
               <% } %>
-              <td><a href="/boards/<%= board.id %>">See Details &raquo;</a></td>
             </tr>
             <% }); %>
           </tbody>
         </table>
       </div>
     </div>
-    <p>Click on a Boardname or "<i>See Details</i>" for a closer look at a particular board.</p>
+    <p>Click on a Board for a closer look at it.</p>
   </div>
   <%- include ../partials/footer.ejs %>
 </body>

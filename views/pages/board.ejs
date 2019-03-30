@@ -57,6 +57,9 @@
             </table>
         </div>
     </div>
+    <% if (!board.trackingEnabled) { %> <p>Click on <i>&#9881;Settings</i> to set up your board for tracking.</p>
+            <% } %>
+
 </div>
 
 <!-- Modal -->
@@ -82,14 +85,6 @@
 
 
                     <div id="onlyonactive">
-                        <hr>
-
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="customSwitch2"
-                                   name="chatbotEnabled">
-                            <label class="custom-control-label" for="customSwitch2">Enable Chatbot</label>
-                        </div>
-
                         <hr>
 
                         <label>Select Columns to Track</label>
@@ -125,7 +120,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-danger" id="saveModalChanges">Save changes</button>
+                    <button type="submit" class="btn btn-primary" id="saveModalChanges">Save changes</button>
                 </div>
             </form>
         </div>
