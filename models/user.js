@@ -51,6 +51,8 @@ module.exports = (sequelize, DataTypes) => {
     }).then(([kragglBoard]) => kragglBoard);
   };
 
+  /* Toggl Methods */
+
   User.prototype.startTimerForCard = function (card, projectId) {
     return new Promise((resolve, reject) => {
       this.togglClient.startTimeEntry({
@@ -81,6 +83,55 @@ module.exports = (sequelize, DataTypes) => {
         else resolve(timeEntry);
       });
     }));
+  };
+
+  User.prototype.getWorkspaces = function () {
+    return new Promise((resolve, reject) => {
+      this.togglClient.getWorkspaces((error, workspaces) => {
+        if (error) reject(error);
+        resolve(workspaces);
+      });
+    });
+  };
+
+  User.prototype.getWorkspaceProjects = function (workspace) {
+    return new Promise((resolve, reject) => {
+      this.togglClient.getWorkspaceProjects(workspace.id, {}, (error, projects) => {
+        if (error) reject(error);
+        resolve({
+          id: workspace.id,
+          name: workspace.name,
+          projects
+        })
+      })
+    });
+  };
+
+  User.prototype.getProjectData = function (projectId) {
+    return new Promise(function (resolve, reject) {
+      this.togglClient.getProjectData(projectId, (error, project) => {
+        if (error) reject(error);
+        else resolve(error);
+      });
+    })
+  };
+
+  User.prototype.getDetailedReportForProject = function (projectId) {
+    return new Promise((resolve, reject) => {
+      this.togglClient.getProjectData(projectId, (error, project) => {
+        if (error) reject(error);
+        else {
+          this.togglClient.detailedReport({
+            workspace_id: project.wid,
+            user_agent: 'kraggl',
+            project_ids: project.id
+          }, (error, report) => {
+            if (error) reject(error);
+            resolve(report);
+          });
+        }
+      });
+    })
   };
 
   return User;

@@ -51,9 +51,11 @@
               <!-- TODO: include times -->
               <tr>
                   <th scope="row"><%= card.name %></th>
-                  <td>03:02:42 <br> 03:22:42</td>
-                  <td>03:22:42 <br> 03:22:42</td>
-                  <td>06:25:24 <br> 03:42:42</td>
+                  <% board.columns.forEach( function (column) {
+                  if(board.trackedColumns.includes(column.id)){%>
+                      <td>03:02:42 <br> 03:22:42</td>
+                  <% }}); %>
+                  <td><%= card.totalTime %></td>
               </tr>
           <% }); %>
           </tbody>
