@@ -46,7 +46,7 @@ const board = function (req, res, next) {
     Board.findByPk(boardId, { include: { model: Column } }),
     user.gloBoardApi.getCardsOfBoard(boardId, { fields: ['name', 'assignees', 'description', 'labels', 'column_id'] })])
     .then(([{ body: gloBoard }, kragglBoard, { body: gloCards }]) => {
-      const trackedColumns = kragglBoard.getTrackedColumns();
+      const trackedColumns = kragglBoard ? kragglBoard.getTrackedColumns() : undefined;
       cards = gloCards;
       board = kragglBoard ? mergeBoards(gloBoard, kragglBoard) : gloBoard;
       board.trackedColumns = trackedColumns;
