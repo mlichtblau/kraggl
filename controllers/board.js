@@ -19,9 +19,19 @@ const boards = function (req, res, next) {
   const gloBoardApi = user.gloBoardApi;
   Promise.all([
     gloBoardApi.getBoards({ fields: ['name', 'columns', 'created_by', 'members'] }),
-    user.getBoards({})
-  ]).then(([{ body: gloBoards }, kragglBoards]) => {
+    user.getBoards({}),
+    user.getSummaryReports()
+  ]).then(([{ body: gloBoards }, kragglBoards, summaryReports]) => {
     const boards = mergeListOfBoards(gloBoards, kragglBoards);
+    boards.forEach(board => {
+      summaryReports.forEach(({ data: workspaceReport }) => {
+        workspaceReport.forEach(projectReport => {
+          if (projectReport.id === board.togglProjectId) {
+            board.totalTime = msToTime(projectReport.time);
+          }
+        });
+      });
+    });
     res.render('pages/boards', { user, boards });
   });
 };
@@ -49,26 +59,28 @@ const board = function (req, res, next) {
       return user.getDetailedReportForProject(board.togglProjectId);
     })
     .then(report => {
-      cards.forEach(card => {
-        let timeEntriesForCard = report.data.filter(timeEntry => timeEntry.description === card.name);
+      if (report) {
+        cards.forEach(card => {
+          let timeEntriesForCard = report.data.filter(timeEntry => timeEntry.description === card.name);
 
-        let columnTimes = {};
-        let totalTime = 0;
-        for (const timeEntry of timeEntriesForCard) {
-          for (const tag of timeEntry.tags) {
-            if (!columnTimes[tag]) columnTimes[tag] = 0;
-            columnTimes[tag] += timeEntry.dur;
+          let columnTimes = {};
+          let totalTime = 0;
+          for (const timeEntry of timeEntriesForCard) {
+            for (const tag of timeEntry.tags) {
+              if (!columnTimes[tag]) columnTimes[tag] = 0;
+              columnTimes[tag] += timeEntry.dur;
+            }
+            totalTime += timeEntry.dur;
           }
-          totalTime += timeEntry.dur;
-        }
-        // let totalTime = timeEntriesForCard.reduce((totalTime, timeEntry) => totalTime + timeEntry.dur, 0);
-        for (let key of Object.keys(columnTimes)) {
-          columnTimes[key] = msToTime(columnTimes[key]);
-        }
+          // let totalTime = timeEntriesForCard.reduce((totalTime, timeEntry) => totalTime + timeEntry.dur, 0);
+          for (let key of Object.keys(columnTimes)) {
+            columnTimes[key] = msToTime(columnTimes[key]);
+          }
 
-        card.totalTime = msToTime(totalTime);
-        card.columnTimes = columnTimes;
-      });
+          card.totalTime = msToTime(totalTime);
+          card.columnTimes = columnTimes;
+        });
+      }
       res.render('pages/board.ejs', { cards, board, workspaces })
     })
     .catch(error => {
@@ -109,8 +121,7 @@ const saveBoard = function (req, res, next) {
       res.redirect('/boards/' + newBoard.id);
     })
     .catch(error => {
-      console.log(error);
-      // TODO: Handle error
+      next(error);
     });
 };
 

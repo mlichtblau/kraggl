@@ -139,5 +139,29 @@ module.exports = (sequelize, DataTypes) => {
     })
   };
 
+  User.prototype.getSummaryReports = function () {
+    return new Promise(((resolve, reject) => {
+      this.togglClient.getWorkspaces((error, workspaces) => {
+        let $workspaceReports = [];
+        workspaces.forEach(workspace => {
+          const $workspaceReport = new Promise(((resolve1, reject1) => {
+            this.togglClient.summaryReport({
+              workspace_id: workspace.id,
+              user_agent: 'kraggl',
+              grouping: 'projects'
+            }, (error, report) => {
+              if (error) reject1(error);
+              resolve1(report);
+            })
+          }));
+          $workspaceReports.push($workspaceReport);
+        });
+        Promise.all($workspaceReports)
+          .then(workspaceReports => resolve(workspaceReports))
+          .catch(error => reject(error));
+      })
+    }));
+  };
+
   return User;
 };
