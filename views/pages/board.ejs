@@ -43,9 +43,13 @@
                     <tr>
                         <th scope="row"><%= card.name %></th>
                         <% board.columns.forEach( function (column) {
-                        if (board.trackedColumns && board.trackedColumns.includes(column.id)){ %>
+                        if (board.trackedColumns && board.trackedColumns.includes(column.id)){
+                          if(card.columnTimes){ %>
                             <td><%= card.columnTimes[column.name] %></td>
-                        <% }}); %>
+                        <% }
+                        else{%>
+                          <td></td>
+                        <%}}}); %>
                         <td><%= card.totalTime %></td>
                     </tr>
                 <% }); %>
@@ -128,6 +132,7 @@
     </div>
 </div>
 <%- include ../partials/footer.ejs %>
+<script src="/javascripts/switch.js"></script>
 </body>
 
 </html>
