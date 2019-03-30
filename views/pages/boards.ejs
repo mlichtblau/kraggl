@@ -20,8 +20,7 @@
           <thead>
             <tr>
               <th scope="col">Board Name</th>
-              <th scope="col">Personal Time Tracked</th>
-              <th scope="col">Team Time Tracked</th>
+              <th scope="col">Personal Time</th>
               <th scope="col">Tracking?</th>
               <th scope="col"></th>
             </tr>
@@ -33,9 +32,9 @@
               <th scope="row"><a href="/boards/<%= board.id %>"><%= board.name %></a></th>
               <td><%= board.totalTime %></td>
               <% if (board.trackingEnabled) { %>
-              <td>Tracking</td>
+              <td>&#9989;</td>
               <% } else { %>
-              <td>Not tracking</td>
+              <td>&#10060;</td>
               <% } %>
               <td><a href="/boards/<%= board.id %>">See Details &raquo;</a></td>
             </tr>
