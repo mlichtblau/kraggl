@@ -57,7 +57,7 @@ const board = function (req, res, next) {
         for (const timeEntry of timeEntriesForCard) {
           for (const tag of timeEntry.tags) {
             if (!columnTimes[tag]) columnTimes[tag] = 0;
-            columnTimes[tag] += columnTimes[tag] + timeEntry.dur;
+            columnTimes[tag] += timeEntry.dur;
           }
           totalTime += timeEntry.dur;
         }
