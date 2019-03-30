@@ -6,9 +6,19 @@ const togglController = require('../controllers/toggl');
 const boardController = require('../controllers/board');
 const gloController = require('../controllers/glo');
 
+const requireLogIn = function (req, res, next) {
+  if (!req.user) return res.redirect('/login');
+  else next();
+};
+
+const requireTogglKey = function (req, res, next) {
+  if (!req.user.togglApiKey) return res.redirect('/toggl');
+  else next();
+};
+
 /* home page. */
 router.get('/', function (req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index');
 });
 
 /* Redirect to GitKraken */
@@ -18,22 +28,22 @@ router.get('/login', authController.login);
 router.get('/callback/oauth', authController.gitKrakenCallback);
 
 /* Logout user */
-router.get('/logout', authController.logout);
+router.post('/logout', authController.logout);
 
 /* let the user enter his Toggl API key */
-router.get('/toggl', togglController.toggl);
+router.get('/toggl', requireLogIn, togglController.toggl);
 
 /* save the Toggl API key */
-router.post('/toggl', togglController.saveTogglApiKey);
+router.post('/toggl', requireLogIn, togglController.saveTogglApiKey);
 
 /* display the users boards */
-router.get('/boards', boardController.boards);
+router.get('/boards', requireLogIn, requireTogglKey, boardController.boards);
 
 /* display a board */
-router.get('/boards/:boardId', boardController.board);
+router.get('/boards/:boardId', requireLogIn, requireTogglKey, boardController.board);
 
 /* update board preferences */
-router.post('/boards/:boardId', boardController.saveBoard);
+router.post('/boards/:boardId', requireLogIn, requireTogglKey, boardController.saveBoard);
 
 /* provide glo board hook */
 router.post('/glo/hook', gloController.hook);

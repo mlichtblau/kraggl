@@ -62,14 +62,13 @@ const board = function (req, res, next) {
           totalTime += timeEntry.dur;
         }
         // let totalTime = timeEntriesForCard.reduce((totalTime, timeEntry) => totalTime + timeEntry.dur, 0);
-        for (let key of columnTimes) {
+        for (let key of Object.keys(columnTimes)) {
           columnTimes[key] = msToTime(columnTimes[key]);
         }
 
         card.totalTime = msToTime(totalTime);
         card.columnTimes = columnTimes;
       });
-      console.log(cards);
       res.render('pages/board.ejs', { cards, board, workspaces })
     })
     .catch(error => {

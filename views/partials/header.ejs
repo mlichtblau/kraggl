@@ -1,9 +1,10 @@
-
-    <nav class="navbar navbar-dark">
-      <a class="navbar-brand mr-auto" href="#">
+<nav class="navbar navbar-dark">
+    <a class="navbar-brand mr-auto" href="#">
         <img src="../images/kragglLogo.svg" width="100" height="auto" alt="Kraggl">
-      </a>
-      <div class="navbar-nav nav-item ml-auto">
-              <a href="/" class="nav-link">Logout</a>
-      </div>
+    </a>
+    <div class="navbar-nav nav-item ml-auto">
+        <form id="logout-form" action="/logout" method="post">
+            <a onclick="document.getElementById('logout-form').submit();" class="nav-link">Logout</a>
+        </form>
+    </div>
 </nav>
