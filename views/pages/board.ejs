@@ -87,6 +87,16 @@
                     <div id="onlyonactive">
                         <hr>
 
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="switchChatbot" name="chatbotEnabled"
+                            <% if (board.chatbotEnabled) { %> checked="checked"
+                                    <% } %>
+                            >
+                            <label class="custom-control-label" for="switchChatbot">Chatbot</label>
+                        </div>
+
+                        <hr>
+
                         <label>Select Columns to Track</label>
                         <% board.columns.forEach( function (column, index) { %>
                             <div class="custom-control custom-checkbox">

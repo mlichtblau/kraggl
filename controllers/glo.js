@@ -3,6 +3,7 @@ const timeHelper = require('../helpers/time');
 
 const PAUSE_LABEL_TEXT = 'On Hold';
 const COMMENT_HEADER = '# Time Summary\n\n';
+const COMMENT_FOOTER = '\n\nPowered By: [Kraggl](https://kraggl.lichtblau.io)';
 
 const isColumnTracked = (columnId, board) => {
   return board.Columns.map(col => col.id).includes(columnId);
@@ -29,7 +30,7 @@ const createNewComment = (columnTimes) => {
     middle += '|-----';
     bottom += '|' + timeHelper.msToTime(columnTimes[key]);
   }
-  return COMMENT_HEADER + header + '|\n' + middle + '|\n' + bottom + '|';
+  return COMMENT_HEADER + header + '|\n' + middle + '|\n' + bottom + '|' + COMMENT_FOOTER;
 };
 
 const updateComment = (user, card, board) => {
