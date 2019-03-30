@@ -29,7 +29,7 @@
             <tr>
               <th scope="col">Title</th>
               <% board.columns.forEach( function (column) {
-                if(board.trackedColumns.includes(column.id)){%>
+                if (board.trackedColumns && board.trackedColumns.includes(column.id)){%>
               <th scope="col"><%= column.name %></th>
               <% }}); %>
               <th scope="col">Total time</th>
@@ -42,7 +42,7 @@
             <tr>
               <th scope="row"><%= card.name %></th>
               <% board.columns.forEach( function (column) {
-                  if(board.trackedColumns.includes(column.id)){%>
+                  if (board.trackedColumns && board.trackedColumns.includes(column.id)){%>
               <td><%= card.columnTimes[column.name] %></td>
               <% }}); %>
               <td><%= card.totalTime %></td>
