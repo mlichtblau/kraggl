@@ -62,7 +62,11 @@ const board = function (req, res, next) {
           totalTime += timeEntry.dur;
         }
         // let totalTime = timeEntriesForCard.reduce((totalTime, timeEntry) => totalTime + timeEntry.dur, 0);
-        card.totalTime = totalTime;
+        for (let key of columnTimes) {
+          columnTimes[key] = msToTime(columnTimes[key]);
+        }
+
+        card.totalTime = msToTime(totalTime);
         card.columnTimes = columnTimes;
       });
       console.log(cards);
@@ -109,6 +113,18 @@ const saveBoard = function (req, res, next) {
       console.log(error);
       // TODO: Handle error
     });
+};
+
+const msToTime = function(duration){
+   let seconds = parseInt((duration/1000)%60)
+   , minutes = parseInt((duration/(1000*60))%60)
+   , hours = parseInt((duration/(1000*60*60))%24);
+
+   hours = (hours < 10) ? "0" + hours : hours;
+   minutes = (minutes < 10) ? "0" + minutes : minutes;
+   seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+   return hours + ":" + minutes + ":" + seconds;
 };
 
 module.exports = {
