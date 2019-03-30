@@ -54,17 +54,22 @@ module.exports = (sequelize, DataTypes) => {
   /* Toggl Methods */
 
   User.prototype.startTimerForCard = function (card, projectId) {
-    return new Promise((resolve, reject) => {
-      this.togglClient.startTimeEntry({
-        pid: projectId,
-        description: card.name,
-        tags: ['Kraggl', card.id],
-        created_with: 'Kraggl'
-      }, (error, timeEntry) => {
-        if (error) reject(error);
-        else resolve(timeEntry);
+    return this.gloBoardApi.getBoard(card.board_id, {
+      fields: ['columns']
+    }).then(({ body: board }) => {
+      const column = board.columns.find(column => column.id === card.column_id);
+      return new Promise((resolve, reject) => {
+        this.togglClient.startTimeEntry({
+          pid: projectId,
+          description: card.name,
+          tags: ['Kraggl', column.name],
+          created_with: 'Kraggl'
+        }, (error, timeEntry) => {
+          if (error) reject(error);
+          else resolve(timeEntry);
+        });
       });
-    });
+    })
   };
 
   User.prototype.getCurrentTimeEntry = function () {

@@ -28,7 +28,7 @@ const startTimerForCardAndProject = (user, card, projectId) => {
 const stopTimerForCardIfRunning = (user, card) => {
   return user.getCurrentTimeEntry()
     .then(timeEntry => {
-      if (timeEntry && timeEntry.tags.includes(card.id)) {
+      if (timeEntry && timeEntry.description === card.name) {
         return user.stopTimeEntry(timeEntry.id)
       }
     })

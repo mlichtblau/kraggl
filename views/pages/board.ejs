@@ -53,7 +53,7 @@
                   <th scope="row"><%= card.name %></th>
                   <% board.columns.forEach( function (column) {
                   if(board.trackedColumns.includes(column.id)){%>
-                      <td>03:02:42 <br> 03:22:42</td>
+                      <td><%= card.columnTimes[column.name] %></td>
                   <% }}); %>
                   <td><%= card.totalTime %></td>
               </tr>

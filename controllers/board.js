@@ -39,7 +39,7 @@ const board = function (req, res, next) {
       const trackedColumns = kragglBoard.getTrackedColumns();
       cards = gloCards;
       board = kragglBoard ? mergeBoards(gloBoard, kragglBoard) : gloBoard;
-      board.trackedColumns = trackedColumns
+      board.trackedColumns = trackedColumns;
       return user.getWorkspaces();
     })
     .then(workspaces => Promise.all(workspaces.map(workspace => user.getWorkspaceProjects(workspace))))
@@ -51,9 +51,21 @@ const board = function (req, res, next) {
     .then(report => {
       cards.forEach(card => {
         let timeEntriesForCard = report.data.filter(timeEntry => timeEntry.description === card.name);
-        let totalTime = timeEntriesForCard.reduce((totalTime, timeEntry) => totalTime + timeEntry.dur, 0);
+
+        let columnTimes = {};
+        let totalTime = 0;
+        for (const timeEntry of timeEntriesForCard) {
+          for (const tag of timeEntry.tags) {
+            if (!columnTimes[tag]) columnTimes[tag] = 0;
+            columnTimes[tag] += columnTimes[tag] + timeEntry.dur;
+          }
+          totalTime += timeEntry.dur;
+        }
+        // let totalTime = timeEntriesForCard.reduce((totalTime, timeEntry) => totalTime + timeEntry.dur, 0);
         card.totalTime = totalTime;
+        card.columnTimes = columnTimes;
       });
+      console.log(cards);
       res.render('pages/board.ejs', { cards, board, workspaces })
     })
     .catch(error => {
