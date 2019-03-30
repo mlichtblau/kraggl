@@ -17,9 +17,22 @@ const requireTogglKey = function (req, res, next) {
 };
 
 /* home page. */
-router.get('/', function (req, res, next) {
-  res.render('index');
-});
+router.get('/',
+  (req, res, next) => {
+    if (req.user) {
+      if (req.user.togglApiKey) {
+        return res.redirect('/boards')
+      } else {
+        return res.redirect('/toggl')
+      }
+    } else {
+      next();
+    }
+  },
+  (req, res, next) => {
+    res.render('index');
+  }
+);
 
 /* Redirect to GitKraken */
 router.get('/login', authController.login);
@@ -31,7 +44,14 @@ router.get('/callback/oauth', authController.gitKrakenCallback);
 router.post('/logout', authController.logout);
 
 /* let the user enter his Toggl API key */
-router.get('/toggl', requireLogIn, togglController.toggl);
+router.get('/toggl',
+  requireLogIn,
+  (req, res, next) => {
+    if (req.user.togglApiKey) return res.redirect('/boards');
+    else next();
+  },
+  togglController.toggl
+);
 
 /* save the Toggl API key */
 router.post('/toggl', requireLogIn, togglController.saveTogglApiKey);
