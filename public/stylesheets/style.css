@@ -16,12 +16,26 @@ em{
   box-shadow: 0px 0px 40px 10px #F81894;
 }
 
+.btn-primary{
+  background-color: #F81870;
+  border: none;
+}
+
+.btn-primary:hover{
+  background-color: #F81894;
+}
+
 /* === Index === */
 
-.index{
+.index-container{
   margin-top: 50px;
 }
 
+/* === Toggl === */
+
+.toggl-container{
+  margin-top: 110px;
+}
 
 
 .table-card{
@@ -32,16 +46,6 @@ em{
 .table-responsive{
   background: transparent;
 }
-
-.btn-danger{
-  background-color: #F81870;
-  border: none;
-}
-
-.btn-danger:hover{
-  background-color: #F81894;}
-
-
 
 .navbar-brand {
     position: absolute;
@@ -61,9 +65,7 @@ em{
   margin-top: auto;
 }
 
-.content{
-  margin-top: 110px;
-}
+
 
 .table{
   color: #CDECF4;

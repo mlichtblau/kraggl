@@ -1,66 +1,47 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<head>
+  <%- include ../partials/head.ejs %>
+  <title>Kraggl - Toggl</title>
+</head>
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<body>
+  <%- include ../partials/header.ejs %>
+  <div class="container toggl-container">
+    <div class="row align-items-center">
 
-    <title>Kraggl - Toggl</title>
-
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-
-  </head>
-  <body>
-
-    <%- include ../partials/header.ejs %>
-
-    <div class="container content">
-        <div class="row align-items-center">
-
-    <div class="col-md-4 d-none d-lg-block">
-      <div class="card toggl-Signin" style="max-width: 18rem;">
-      <div class="card-body">
-        <p class="card-text">Hi <em><%= user.username %></em>!<br>
-        You successfully connected to your GitKraken Account.</p>
-        <img class="card-img" src="profilePicDub.png" alt="Card image">
-      </div>
-    </div>
-    </div>
-    <div class="col-md-4 order-12"><img src="/images/kraggl.svg" class="img-fluid kraggl" alt="Responsive image"></div>
-
-    <div class="col order-md-12">
-      <div class="card toggl-Signin">
-      <div class="card-body">
-        <p class="card-text"> The next step is to connect <em>Kraggl</em> to your Toggl account.</p>
-                <form class="" action="/toggl" method="post">
-        <div class="input-group mb-3">
-
-            <input name="togglApiKey" type="text" class="form-control" placeholder="Toggl API Token" aria-label="Toggl API Key" aria-describedby="basic-addon2">
-            <div class="input-group-append">
-              <button type="submit" name="button" class="btn btn-danger">
-                Connect
-              </button>
+      <div class="col-md-4 d-none d-lg-block">
+        <div class="card">
+          <div class="card-body">
+            <p class="card-text">Hi <em><%= user.username %></em>!<br>
+              You successfully connected to your GitKraken Account.</p>
           </div>
+        </div>
       </div>
-    </form>
-<small>Your Toggl API Token can be found on your Toggl profile page. Go to <i>toggl.com/app/profile</i> and scroll all the way down to copy your token.</small>
+
+      <div class="col-md-4 order-12"><img src="/images/kraggl.svg" class="img-fluid kraggl" alt="Responsive image"></div>
+
+      <div class="col order-md-12">
+        <div class="card">
+          <div class="card-body">
+            <p class="card-text"> The next step is to connect <em>Kraggl</em> to your Toggl account.</p>
+            <form action="/toggl" method="post">
+              <div class="input-group mb-3">
+                <input name="togglApiKey" type="text" class="form-control" placeholder="Toggl API Token" aria-label="Toggl API Token">
+                <div class="input-group-append">
+                  <button type="submit" name="button" class="btn btn-primary">Connect</button>
+                </div>
+              </div>
+            </form>
+            <small>Your Toggl API Token can be found on your Toggl profile page. Go to <i>toggl.com/app/profile</i> and scroll all the way down to copy your token.</small>
+          </div>
+        </div>
       </div>
+      
     </div>
-    </div>
-
-    </div>
-
   </div>
-      <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  </body>
+  <%- include ../partials/footer.ejs %>
+</body>
+
 </html>
