@@ -1,6 +1,8 @@
 const authHelper = require('../helpers/auth');
+const timeHelper = require('../helpers/time');
 
 const PAUSE_LABEL_TEXT = 'On Hold';
+const COMMENT_HEADER = '# Time Summary\n\n';
 
 const isColumnTracked = (columnId, board) => {
   return board.Columns.map(col => col.id).includes(columnId);
@@ -20,15 +22,53 @@ const isCardPaused = (labels) => {
   });
 };
 
+const createNewComment = (columnTimes) => {
+  let header = '', middle = '', bottom = '';
+  for (let key of Object.keys(columnTimes)) {
+    header += '|' + key;
+    middle += '|-----';
+    bottom += '|' + timeHelper.msToTime(columnTimes[key]);
+  }
+  return COMMENT_HEADER + header + '|\n' + middle + '|\n' + bottom + '|';
+};
+
+const updateComment = (user, card, board) => {
+  user.getSummaryReportForProjectGroupedByTags(board.togglProjectId)
+    .then(({ data: tagReports }) => {
+      let columnTimes = {};
+      tagReports.forEach(tagReport => {
+        const columnTitle = tagReport.title.tag;
+        const columnTime = tagReport.items.find(timeEntry => timeEntry.title.time_entry === card.name);
+        columnTimes[columnTitle] = columnTime ? columnTime.time : 0;
+      });
+      if (Object.keys(columnTimes).length === 0) return;
+      user.gloBoardApi.getCommentsOfCard(board.id, card.id, {
+        fields: ['created_by', 'text']
+      }).then(({ body: comments }) => {
+        const oldComment = comments.find(comment => comment.text.startsWith(COMMENT_HEADER) && comment.created_by.id === user.id);
+        const newCommentText = createNewComment(columnTimes);
+        if (oldComment) {
+          return user.gloBoardApi.editComment(board.id, card.id, oldComment.id, { text: newCommentText });
+        } else {
+          return user.gloBoardApi.createComment(board.id, card.id, { text: newCommentText });
+        }
+      }).then(({ body: comment }) => {
+        console.log(`${ user.username } updated the time summary.`);
+      }).catch(error => console.log(error))
+    })
+    .catch(error => console.log(error))
+};
+
 const startTimerForCardAndProject = (user, card, projectId) => {
   return user.startTimerForCard(card, projectId)
     .then(timeEntry => console.log(`Started Time Entry with ID: ${ timeEntry.id }`));
 };
 
-const stopTimerForCardIfRunning = (user, card) => {
+const stopTimerForCardIfRunning = (user, card, board) => {
   return user.getCurrentTimeEntry()
     .then(timeEntry => {
       if (timeEntry && timeEntry.description === card.name) {
+        if (board.chatbotEnabled) updateComment(user, card, board);
         return user.stopTimeEntry(timeEntry.id)
       }
     })
@@ -45,7 +85,7 @@ const handleMovedColumn = function ({board, card}, user) {
         if (isColumnTracked(card.column_id, kragglBoard))  {
           return startTimerForCardAndProject(user, card, kragglBoard.togglProjectId);
         } else {
-          return stopTimerForCardIfRunning(user, card);
+          return stopTimerForCardIfRunning(user, card, kragglBoard);
         }
       }})
     .catch(error => {
@@ -57,9 +97,8 @@ const handleCardDeleted = function ({board, card}, user) {
   user.getBoardWithId(board.id)
     .then(kragglBoard => {
       if (kragglBoard) {
-        console.log(isColumnTracked(card.column_id, kragglBoard));
         if (isColumnTracked(card.column_id, kragglBoard))  {
-          return stopTimerForCardIfRunning(user, card);
+          return stopTimerForCardIfRunning(user, card, kragglBoard);
         }
       }})
     .catch(error => {

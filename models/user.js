@@ -139,6 +139,26 @@ module.exports = (sequelize, DataTypes) => {
     })
   };
 
+  User.prototype.getSummaryReportForProjectGroupedByTags = function (projectId) {
+    return new Promise((resolve, reject) => {
+      this.togglClient.getProjectData(projectId, (error, project) => {
+        if (error) reject(error);
+        else {
+          this.togglClient.summaryReport({
+            workspace_id: project.wid,
+            user_agent: 'kraggl',
+            project_ids: project.id,
+            grouping: 'tags',
+            subgrouping: 'time_entries'
+          }, (error, report) => {
+            if (error) reject(error);
+            resolve(report);
+          });
+        }
+      });
+    })
+  };
+
   User.prototype.getSummaryReports = function () {
     return new Promise(((resolve, reject) => {
       this.togglClient.getWorkspaces((error, workspaces) => {

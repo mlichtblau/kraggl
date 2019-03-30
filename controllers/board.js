@@ -1,7 +1,8 @@
+const timeHelper = require('../helpers/time');
+
 const models = require('../models');
 const Board = models.Board;
 const Column = models.Column;
-const User = models.User;
 
 const mergeBoards = function (gloBoard, kragglBoard) {
   return {...gloBoard, ...kragglBoard.dataValues };
@@ -27,7 +28,7 @@ const boards = function (req, res, next) {
       summaryReports.forEach(({ data: workspaceReport }) => {
         workspaceReport.forEach(projectReport => {
           if (projectReport.id === board.togglProjectId) {
-            board.totalTime = msToTime(projectReport.time);
+            board.totalTime = timeHelper.msToTime(projectReport.time);
           }
         });
       });
@@ -74,10 +75,10 @@ const board = function (req, res, next) {
           }
           // let totalTime = timeEntriesForCard.reduce((totalTime, timeEntry) => totalTime + timeEntry.dur, 0);
           for (let key of Object.keys(columnTimes)) {
-            columnTimes[key] = msToTime(columnTimes[key]);
+            columnTimes[key] = timeHelper.msToTime(columnTimes[key]);
           }
 
-          card.totalTime = msToTime(totalTime);
+          card.totalTime = timeHelper.msToTime(totalTime);
           card.columnTimes = columnTimes;
         });
       }
@@ -123,18 +124,6 @@ const saveBoard = function (req, res, next) {
     .catch(error => {
       next(error);
     });
-};
-
-const msToTime = function(duration){
-   let seconds = parseInt((duration/1000)%60)
-   , minutes = parseInt((duration/(1000*60))%60)
-   , hours = parseInt((duration/(1000*60*60))%24);
-
-   hours = (hours < 10) ? "0" + hours : hours;
-   minutes = (minutes < 10) ? "0" + minutes : minutes;
-   seconds = (seconds < 10) ? "0" + seconds : seconds;
-
-   return hours + ":" + minutes + ":" + seconds;
 };
 
 module.exports = {
