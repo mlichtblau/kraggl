@@ -19,13 +19,22 @@
         Combine your favourite tracking tools for tasks (Glo Boards) and time (Toggl). <em>Kraggl</em> automatically starts your Toggl timer by dragging cards into tracked columns in Glo Boards. Easy tracking starts now.</p>
       </div>
     </div>
+
     <div class="row">
       <div class="col-md-6 offset-md-3">
-        <a class="btn btn-lg btn-primary btn-block" href="/toggl" role="button">Try now</a>
+        <form method="get" action="/toggl">
+          <button type="submit" id="start" class="btn btn-lg btn-primary btn-block" name="button" disabled>Get started</button>
+        </form>
       </div>
     </div>
+    <div class="custom-control custom-checkbox cookie-disclaimer">
+    <input type="checkbox" class="custom-control-input" id="cookie-disclaimer">
+    <label class="custom-control-label" for="cookie-disclaimer">Accept the use of cookies and the privacy agreement.</label>
+    </div>
+
   </div>
   <%- include partials/footer.ejs %>
+  <script src="/javascripts/switch.js"></script>
 </body>
 
 </html>

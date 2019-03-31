@@ -19,3 +19,12 @@ $('#switchTracking').click(function() {
 $('#settingsModal').on('hidden.bs.modal', function(){
     $(this).find('form')[0].reset();
 });
+
+$('#cookie-disclaimer').click(function() {
+  if ($('#cookie-disclaimer').is(':checked')) {
+    $("#start").removeAttr('disabled');
+  }
+  else{
+        $("#start").prop('disabled', true);
+  }
+});

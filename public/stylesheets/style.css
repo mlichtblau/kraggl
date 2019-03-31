@@ -25,6 +25,11 @@ em {
   background-color: #F81894;
 }
 
+.btn:disabled {
+  background-color: darkgray;
+  color: gray;
+}
+
 a {
   color: #CDECF4;
 }
@@ -75,6 +80,10 @@ tbody tr th, thead tr th:first-child {
   margin-top: 50px;
 }
 
+.cookie-disclaimer{
+  margin-top: 20px;
+}
+
 /* === Navbar === */
 .navbar {
   margin-bottom: 50px;
@@ -84,6 +93,16 @@ tbody tr th, thead tr th:first-child {
   position: absolute;
   left: 10px;
   top: 0px;
+}
+
+/* === Footer === */
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  font-size: 14px;
 }
 
 /* === Toggl === */
