@@ -78,6 +78,7 @@ tbody tr th, thead tr th:first-child {
 /* === Index === */
 .index-container {
   margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 .cookie-disclaimer{
@@ -97,17 +98,17 @@ tbody tr th, thead tr th:first-child {
 
 /* === Footer === */
 .footer {
-  position: absolute;
   bottom: 0;
   width: 100%;
   height: 50px;
   line-height: 50px;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 /* === Toggl === */
 .toggl-container {
   margin-top: 110px;
+  margin-bottom: 110px;
 }
 
 /* === Settings Modal === */
