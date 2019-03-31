@@ -1,4 +1,4 @@
-![Node/Express/Mongoose Example App](public/images/KragglWithoutSucker.png)
+![Node/Express/Mongoose Example App](public/images/KragglWithoutSucker.svg)
 
 Connect your Glo Board projects to your Toggl account and never forget to track your time again.
 With detailed time entry descriptions and tags depending of the state your task is in, Kraggl allows you to combine the power of Glo Boards as a project management tool with Toggl and it's professional reporting tools.
