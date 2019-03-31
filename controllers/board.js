@@ -25,8 +25,8 @@ const boards = function (req, res, next) {
   ]).then(([{ body: gloBoards }, kragglBoards, summaryReports]) => {
     const boards = mergeListOfBoards(gloBoards, kragglBoards);
     boards.forEach(board => {
-      summaryReports.forEach(({ data: workspaceReport }) => {
-        workspaceReport.forEach(projectReport => {
+      summaryReports.forEach(({ data: projectReports }) => {
+        projectReports.forEach(projectReport => {
           if (projectReport.id === board.togglProjectId) {
             board.totalTime = timeHelper.msToTime(projectReport.time);
           }
