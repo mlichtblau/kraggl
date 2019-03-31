@@ -29,7 +29,7 @@
             <p class="card-text"> The next step is to connect <em>Kraggl</em> to your Toggl account.</p>
             <form action="/toggl" method="post">
               <div class="input-group mb-3">
-                <input name="togglApiKey" type="text" class="form-control" placeholder="Toggl API Token" aria-label="Toggl API Token">
+                <input name="togglApiKey" type="text" class="form-control" placeholder="Toggl API Token" aria-label="Toggl API Token" <% if (user.togglApiKey) { %>value="<%= user.togglApiKey %>" <% } %>>
                 <div class="input-group-append">
                   <button type="submit" name="button" class="btn btn-primary">Connect</button>
                 </div>

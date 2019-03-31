@@ -46,10 +46,6 @@ router.post('/logout', authController.logout);
 /* let the user enter his Toggl API key */
 router.get('/toggl',
   requireLogIn,
-  (req, res, next) => {
-    if (req.user.togglApiKey) return res.redirect('/boards');
-    else next();
-  },
   togglController.toggl
 );
 
