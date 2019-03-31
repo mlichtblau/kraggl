@@ -1,12 +1,21 @@
-<nav class="navbar navbar-dark">
-    <a class="navbar-brand mr-auto" href="/">
-        <img src="../images/kragglLogo.svg" width="100" height="auto" alt="Kraggl">
-    </a>
-    <div class="navbar-nav nav-item ml-auto">
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <a class="navbar-brand" href="/">
+      <img src="../images/kragglLogo.svg" width="100" height="auto" alt="Kraggl">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+</button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
         <a href="/toggl" class="nav-link">Toggl Key</a>
+      </li>
+      <li class="nav-item">
         <a href="/boards" class="nav-link">Boards</a>
-        <form id="logout-form" action="/logout" method="post">
-            <a onclick="document.getElementById('logout-form').submit();" class="nav-link">Logout</a>
-        </form>
-    </div>
+      </li>
+    </ul>
+    <form id="logout-form" action="/logout" method="post">
+        <a onclick="document.getElementById('logout-form').submit();" class="nav-link">Logout</a>
+    </form>
+  </div>
 </nav>

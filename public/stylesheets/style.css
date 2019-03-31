@@ -96,6 +96,12 @@ tbody tr th, thead tr th:first-child {
   top: 0px;
 }
 
+.navbar-toggler {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+}
+
 /* === Footer === */
 .footer {
   bottom: 0;
