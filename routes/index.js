@@ -34,6 +34,16 @@ router.get('/',
   }
 );
 
+/* Privacy Statement */
+router.get('/privacy', (req, res, next) => {
+  res.render('pages/privacy');
+});
+
+/* Imprint */
+router.get('/imprint', (req, res, next) => {
+  res.render('pages/imprint');
+});
+
 /* Redirect to GitKraken */
 router.get('/login', authController.login);
 
@@ -44,10 +54,7 @@ router.get('/callback/oauth', authController.gitKrakenCallback);
 router.post('/logout', authController.logout);
 
 /* let the user enter his Toggl API key */
-router.get('/toggl',
-  requireLogIn,
-  togglController.toggl
-);
+router.get('/toggl', requireLogIn, togglController.toggl);
 
 /* save the Toggl API key */
 router.post('/toggl', requireLogIn, togglController.saveTogglApiKey);
