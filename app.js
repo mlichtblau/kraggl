@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var logger = require('morgan');
+var favicon = require('serve-favicon');
 var SQLiteStore = require('connect-sqlite3')(session);
 var passport = require('passport');
 var authHelper = require('./helpers/auth');
@@ -15,6 +16,7 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+app.use(favicon(path.join(__dirname,'public','images','favicon.ico')));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
