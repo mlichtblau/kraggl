@@ -38,7 +38,7 @@ const updateComment = (user, card, board) => {
     .then(({ data: tagReports }) => {
       let columnTimes = {};
       tagReports.forEach(tagReport => {
-        const columnTitle = tagReport.title.tag;
+        const columnTitle = tagReport.title.tag || 'Untagged';
         const columnTime = tagReport.items.find(timeEntry => timeEntry.title.time_entry === card.name);
         columnTimes[columnTitle] = columnTime ? columnTime.time : 0;
       });
