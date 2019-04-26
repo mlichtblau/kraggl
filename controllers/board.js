@@ -56,7 +56,7 @@ const board = function (req, res, next) {
     .then(workspaces => Promise.all(workspaces.map(workspace => user.getWorkspaceProjects(workspace))))
     .then(workspacesWithProjects => {
       workspaces = workspacesWithProjects;
-      if (!board.trackingEnabled) return;
+      if (!board.trackingEnabled || !board.togglProjectId) return;
       return user.getDetailedReportForProject(board.togglProjectId);
     })
     .then(report => {
@@ -93,6 +93,10 @@ const saveBoard = function (req, res, next) {
   const user = req.user;
   const boardId = req.params.boardId;
   const { trackingEnabled, togglProjectId, trackedColumns, chatbotEnabled } = req.body;
+
+  if (!togglProjectId) {
+    return res.redirect('/boards/' + boardId);
+  }
 
   Board.findByPk(boardId, { include: { model: Column } })
     .then(board => {
