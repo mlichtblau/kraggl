@@ -22,7 +22,7 @@ A `Dockerfile` is provided and can be used in a `docker-compose` setup.
 
 Example `docker-compose` service:
 
-```
+```YAML
 kraggl:
     image: lichtblau/kraggl:latest
     environment:
@@ -34,7 +34,7 @@ kraggl:
 
 And don't forget to add the volume to persist the SQLite database:
 
-```
+```YAML
 volumes:
   kraggl-data:
 ```
