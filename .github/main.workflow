@@ -1,6 +1,6 @@
 workflow "Build and Push to Dockerhub" {
   on = "push"
-  resolves = ["Push Image"]
+  resolves = ["Deploy Master"]
 }
 
 action "Filter master branch" {
@@ -17,18 +17,18 @@ action "Docker Login" {
 action "Build Image" {
   uses = "actions/docker/cli@8cdf801b322af5f369e00d85e9cf3a7122f49108"
   needs = ["Docker Login"]
-  args = "build -t lichtblau/kraggl ."
+  args = "build -t lichtblau/kraggl:master ."
 }
 
 action "Push Image" {
   uses = "actions/docker/cli@8cdf801b322af5f369e00d85e9cf3a7122f49108"
   needs = ["Build Image"]
-  args = "push lichtblau/kraggl"
+  args = "push lichtblau/kraggl:master"
 }
 
 workflow "Build and Push Develop" {
   on = "push"
-  resolves = ["Push Develop Image"]
+  resolves = ["Deploy Dev"]
 }
 
 action "Filter develop branch" {
@@ -52,4 +52,18 @@ action "Push Develop Image" {
   uses = "actions/docker/cli@8cdf801b322af5f369e00d85e9cf3a7122f49108"
   needs = ["Build Develop Image"]
   args = "push lichtblau/kraggl:develop"
+}
+
+action "Deploy Dev" {
+  uses = "maddox/actions/ssh@6fc6694b013badc932fb2a6ec6edfa4e629254cf"
+  needs = ["Push Develop Image"]
+  args = "cd proxy; ./deploy.js develop"
+  secrets = ["PRIVATE_KEY", "PUBLIC_KEY", "HOST", "USER"]
+}
+
+action "Deploy Master" {
+  uses = "maddox/actions/ssh@6fc6694b013badc932fb2a6ec6edfa4e629254cf"
+  needs = ["Push Image"]
+  args = "cd proxy; ./deploy.js master"
+  secrets = ["HOST", "PRIVATE_KEY", "PUBLIC_KEY", "USER"]
 }
