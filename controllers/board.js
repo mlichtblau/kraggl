@@ -119,6 +119,7 @@ const saveBoard = function (req, res, next) {
       }
     })
     .then(newBoard => {
+      req.flash('success', 'Board settings saved!');
       res.redirect('/boards/' + newBoard.id);
     })
     .catch(error => {

@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
+var flash = require('express-flash');
 var logger = require('morgan');
 var favicon = require('serve-favicon');
 var SQLiteStore = require('connect-sqlite3')(session);
@@ -35,6 +36,7 @@ app.use(session({
     dir: 'database'
   }),
 }));
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session({
   secret: process.env.GIT_KRAKEN_CLIENT_SECRET,
