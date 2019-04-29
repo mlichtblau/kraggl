@@ -53,3 +53,15 @@ action "Push Develop Image" {
   needs = ["Build Develop Image"]
   args = "push lichtblau/kraggl:develop"
 }
+
+action "Run deploy script" {
+  uses = "maddox/actions/ssh@6fc6694b013badc932fb2a6ec6edfa4e629254cf"
+  needs = ["Push Develop Image"]
+  args = "cd proxy; ./deploy.js develop"
+  secrets = [
+    "PRIVATE_KEY",
+    "PUBLIC_KEY",
+    "HOST",
+    "USER"
+  ]
+}
