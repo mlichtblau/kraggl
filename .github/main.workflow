@@ -17,13 +17,13 @@ action "Docker Login" {
 action "Build Image" {
   uses = "actions/docker/cli@8cdf801b322af5f369e00d85e9cf3a7122f49108"
   needs = ["Docker Login"]
-  args = "build -t lichtblau/kraggl ."
+  args = "build -t lichtblau/kraggl:master ."
 }
 
 action "Push Image" {
   uses = "actions/docker/cli@8cdf801b322af5f369e00d85e9cf3a7122f49108"
   needs = ["Build Image"]
-  args = "push lichtblau/kraggl"
+  args = "push lichtblau/kraggl:master"
 }
 
 workflow "Build and Push Develop" {
