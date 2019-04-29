@@ -95,6 +95,7 @@ const saveBoard = function (req, res, next) {
   const { trackingEnabled, togglProjectId, trackedColumns, chatbotEnabled } = req.body;
 
   if (!togglProjectId) {
+    req.flash('error', 'Please select a Toggl project.');
     return res.redirect('/boards/' + boardId);
   }
 
