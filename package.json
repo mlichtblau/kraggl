@@ -11,6 +11,7 @@
     "debug": "~2.6.9",
     "ejs": "~2.5.7",
     "express": "~4.16.0",
+    "express-flash": "0.0.2",
     "express-session": "^1.16.1",
     "glo-board-api-node": "git+https://github.com/mlichtblau/glo-board-api-node.git",
     "http-errors": "~1.6.2",
