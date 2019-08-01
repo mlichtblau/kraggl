@@ -12,7 +12,7 @@
     "ejs": "~2.5.7",
     "express": "~4.16.0",
     "express-flash": "0.0.2",
-    "express-session": "^1.16.1",
+    "express-session": "^1.16.2",
     "glo-board-api-node": "git+https://github.com/mlichtblau/glo-board-api-node.git",
     "http-errors": "~1.6.2",
     "morgan": "~1.9.0",
@@ -20,10 +20,10 @@
     "passport": "^0.4.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
-    "sequelize": "^5.7.6",
-    "sequelize-cli": "^5.4.0",
+    "sequelize": "^5.12.2",
+    "sequelize-cli": "^5.5.0",
     "serve-favicon": "^2.5.0",
-    "sqlite3": "^4.0.6",
+    "sqlite3": "^4.0.9",
     "toggl-api": "git+https://github.com/mlichtblau/node-toggl-api.git"
   }
 }
