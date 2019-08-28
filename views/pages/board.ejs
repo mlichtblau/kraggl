@@ -136,6 +136,26 @@
                                     });}}); %>
                             </select>
                         </div>
+                        <hr>
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="switchPauseLabel" name="pauseLabelEnabled" <%= board.labels.length === 0 ? 'disabled' : '' %>>
+                            <label class="custom-control-label" for="switchPauseLabel">Use Pause Labels</label>
+                        </div>
+
+                        <% if(board.labels.length === 0) { %>
+                            <div>
+                                <p>You need to create at least one label in your Glo Board settings to select a "Pause Label".</p>
+                            </div>
+                        <% } else { %>
+                            <div id="pauseLabelSection" class="form-group">
+                                <select class="form-control" id="LabelId" name="labelId">
+                                    <% board.labels.forEach(function(label, index){ %>
+                                        <option value="<%= label.id %>"><%= label.name %></option>
+                                    <%
+                                    }); %>
+                                </select>
+                            </div>
+                        <% } %>
                     </div>
                 </div>
                 <div class="modal-footer">

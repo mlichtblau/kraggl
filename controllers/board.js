@@ -43,7 +43,7 @@ const board = function (req, res, next) {
   const boardId = req.params.boardId;
 
   Promise.all([
-    user.gloBoardApi.getBoard(boardId, { fields: ['name', 'columns', 'members'] }),
+    user.gloBoardApi.getBoard(boardId, { fields: ['name', 'columns', 'members', 'labels'] }),
     Board.findByPk(boardId, { include: { model: Column } }),
     user.gloBoardApi.getCardsOfBoard(boardId, { fields: ['name', 'assignees', 'description', 'labels', 'column_id'] })])
     .then(([{ body: gloBoard }, kragglBoard, { body: gloCards }]) => {
