@@ -18,6 +18,9 @@ module.exports = (sequelize, DataTypes) => {
     userId: {
       type: DataTypes.STRING,
       primaryKey: true,
+    },
+    pauseLabelId: {
+      type: DataTypes.STRING,
     }
   }, {});
 
