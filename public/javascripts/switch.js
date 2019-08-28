@@ -5,6 +5,12 @@ $('#settings').click(function() {
   else{
     $("#onlyonactive").hide();
   }
+  if ($('#switchPauseLabel').is(':checked')) {
+    $("#pauseLabelSection").show();
+  }
+  else{
+    $("#pauseLabelSection").hide();
+  }
 });
 
 $('#switchTracking').click(function() {
@@ -13,6 +19,15 @@ $('#switchTracking').click(function() {
   }
   else{
     $("#onlyonactive").hide();
+  }
+});
+
+$('#switchPauseLabel').click(function() {
+  if ($('#switchPauseLabel').is(':checked')) {
+    $("#pauseLabelSection").show();
+  }
+  else{
+    $("#pauseLabelSection").hide();
   }
 });
 
