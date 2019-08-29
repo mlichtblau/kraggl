@@ -1,27 +1,14 @@
 const authHelper = require('../helpers/auth');
 const timeHelper = require('../helpers/time');
 
-const PAUSE_LABEL_TEXT = 'On Hold';
 const COMMENT_HEADER = '# Time Summary\n\n';
 const COMMENT_FOOTER = '\n\nPowered By: [Kraggl](https://kraggl.lichtblau.io)';
 
-const isColumnTracked = (columnId, board) => {
-  return board.Columns.map(col => col.id).includes(columnId);
-};
+const isColumnTracked = (columnId, board) => board.Columns.map(col => col.id).includes(columnId);
 
-const isCardActivated = (labels) => {
-  return labels.removed.some(label => {
-    console.log('is card activated');
-    console.log(label.name);
-    return label.name === PAUSE_LABEL_TEXT;
-  });
-};
-
-const isCardPaused = (labels) => {
-  return labels.added.some(label => {
-    return label.name === PAUSE_LABEL_TEXT;
-  });
-};
+const isActive = (labels, pauseLabelId) => !labels.some(label => label.id === pauseLabelId);
+const isActivated = (labels, pauseLabelId) => labels.removed.some(label => label.id === pauseLabelId);
+const isPaused = (labels, pauseLabelId) => labels.added.some(label => label.id === pauseLabelId);
 
 const createNewComment = (columnTimes) => {
   let header = '', middle = '', bottom = '';
@@ -83,7 +70,7 @@ const handleMovedColumn = function ({board, card}, user) {
   user.getBoardWithId(board.id)
     .then(kragglBoard => {
       if (kragglBoard) {
-        if (isColumnTracked(card.column_id, kragglBoard))  {
+        if (isColumnTracked(card.column_id, kragglBoard) && isActive(card.labels, kragglBoard.pauseLabelId))  {
           return startTimerForCardAndProject(user, card, kragglBoard.togglProjectId);
         } else {
           return stopTimerForCardIfRunning(user, card, kragglBoard);
@@ -111,7 +98,7 @@ const handleCardAdded = function ({board, card}, user) {
   user.getBoardWithId(board.id)
     .then(kragglBoard => {
       if (kragglBoard) {
-        if (isColumnTracked(card.column_id, kragglBoard))  {
+        if (isColumnTracked(card.column_id, kragglBoard) && isActive(card.labels, kragglBoard.pauseLabelId))  {
           return startTimerForCardAndProject(user, card, kragglBoard.togglProjectId);
         }
       }})
@@ -173,27 +160,20 @@ const hook = function (req, res, next) {
 };
 
 
-const handleLabelsUpdated = function ({board, card, labels}, user) {
-  // TODO: wait for API Fix
-  /*user.getBoardWithId(board.id)
+const handleLabelsUpdated = function ({board, card: { id: cardId }, labels}, user) {
+  user.getBoardWithId(board.id)
     .then(kragglBoard => {
-      if (!kragglBoard) return;
-      console.log(card);
-      user.gloBoardApi.getCard(board.id, card.id, {
-        fields: ['column_id', 'name']
-      }).then(data => {
-        card = data.body;
-        console.log(card);
-        if (isColumnTracked(card.column_id, kragglBoard) && isCardActivated(labels)) {
-          return startTimerForCardAndProject(user, card, kragglBoard.togglProjectId);
-        } else if (isColumnTracked(card.column_id, kragglBoard) && isCardPaused(labels)) {
-          return stopTimerForCardIfRunning(user, card);
-        }
+      if (!kragglBoard || !kragglBoard.pauseLabelId) return;
+      user.gloBoardApi.getCard(board.id, cardId).then(({ body: card }) => {
+        if (!isColumnTracked(card.column_id, kragglBoard)) return;
+        if (isActivated(labels, kragglBoard.pauseLabelId)) return startTimerForCardAndProject(user, card, kragglBoard.togglProjectId);
+        else if (isPaused(labels, kragglBoard.pauseLabelId)) return stopTimerForCardIfRunning(user, card, board);
       })
     })
     .catch(error => {
       console.log(error);
-    })*/
+    });
+
 };
 
 module.exports = {
