@@ -36,8 +36,8 @@ module.exports = (sequelize, DataTypes) => {
 
   /* Instance Methods */
 
-  Board.prototype.updateBoard = function ({togglProjectId, trackingEnabled, chatbotEnabled, trackedColumnIds}) {
-    return this.update({ trackingEnabled, togglProjectId, chatbotEnabled }, { returning: true })
+  Board.prototype.updateBoard = function ({togglProjectId, trackingEnabled, chatbotEnabled, trackedColumnIds, pauseLabelId}) {
+    return this.update({ trackingEnabled, togglProjectId, chatbotEnabled, pauseLabelId }, { returning: true })
       .then(board => {
         let existingColumnIds = board.Columns.map(Col => Col.id);
         let createColumns = trackedColumnIds.filter(columnId => !existingColumnIds.includes(columnId));
