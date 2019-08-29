@@ -92,7 +92,7 @@ const board = function (req, res, next) {
 const saveBoard = function (req, res, next) {
   const user = req.user;
   const boardId = req.params.boardId;
-  const { trackingEnabled, togglProjectId, trackedColumns, chatbotEnabled } = req.body;
+  const { trackingEnabled, togglProjectId, trackedColumns, chatbotEnabled, pauseLabelEnabled, pauseLabelId } = req.body;
 
   if (!togglProjectId) {
     req.flash('error', 'Please select a Toggl project.');
@@ -106,7 +106,8 @@ const saveBoard = function (req, res, next) {
           togglProjectId,
           trackingEnabled: !!trackingEnabled,
           chatbotEnabled: !!chatbotEnabled,
-          trackedColumnIds: trackedColumns
+          trackedColumnIds: trackedColumns,
+          pauseLabelId: (!!pauseLabelEnabled) ? pauseLabelId : null
         })
       } else {
         return Board.create({
@@ -114,7 +115,8 @@ const saveBoard = function (req, res, next) {
           trackingEnabled: !!trackingEnabled,
           togglProjectId,
           chatbotEnabled: !!chatbotEnabled,
-          userId: user.id
+          userId: user.id,
+          pauseLabelId: (!!pauseLabelEnabled) ? pauseLabelId : null
         }).then(board => {
           $columns = trackedColumns.map(columnId => {
             return Column.create({ id: columnId, boardId: board.id });

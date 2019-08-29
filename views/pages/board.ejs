@@ -138,7 +138,7 @@
                         </div>
                         <hr>
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="switchPauseLabel" name="pauseLabelEnabled" <%= board.labels.length === 0 ? 'disabled' : '' %>>
+                            <input type="checkbox" class="custom-control-input" id="switchPauseLabel" name="pauseLabelEnabled" <%= board.labels.length === 0 ? 'disabled' : '' %> <% if (!!board.pauseLabelId) { %> checked="checked" <% } %>>
                             <label class="custom-control-label" for="switchPauseLabel">Use Pause Labels</label>
                         </div>
 
@@ -148,9 +148,11 @@
                             </div>
                         <% } else { %>
                             <div id="pauseLabelSection" class="form-group">
-                                <select class="form-control" id="LabelId" name="labelId">
+                                <select class="form-control" id="PauseLabelId" name="pauseLabelId">
                                     <% board.labels.forEach(function(label, index){ %>
-                                        <option value="<%= label.id %>"><%= label.name %></option>
+                                        <option value="<%= label.id %>" <%
+                                        if(label.id === board.pauseLabelId){ %>selected
+                                                <% } %>><%= label.name %></option>
                                     <%
                                     }); %>
                                 </select>
