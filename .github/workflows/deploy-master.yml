@@ -9,10 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - name: Filter master branch
-        uses: actions/bin/filter@3c0b4f0e63ea54ea5df2914b4fabf383368cd0da
-        with:
-          args: branch master
       - name: Docker Login
         uses: actions/docker/login@8cdf801b322af5f369e00d85e9cf3a7122f49108
         env:
