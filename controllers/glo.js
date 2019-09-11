@@ -167,7 +167,7 @@ const handleLabelsUpdated = function ({board, card: { id: cardId }, labels}, use
       user.gloBoardApi.getCard(board.id, cardId).then(({ body: card }) => {
         if (!isColumnTracked(card.column_id, kragglBoard)) return;
         if (isActivated(labels, kragglBoard.pauseLabelId)) return startTimerForCardAndProject(user, card, kragglBoard.togglProjectId);
-        else if (isPaused(labels, kragglBoard.pauseLabelId)) return stopTimerForCardIfRunning(user, card, board);
+        else if (isPaused(labels, kragglBoard.pauseLabelId)) return stopTimerForCardIfRunning(user, card, kragglBoard);
       })
     })
     .catch(error => {
