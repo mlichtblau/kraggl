@@ -8,20 +8,13 @@ jobs:
     name: Deploy Develop
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v1
       - name: Docker Login
-        uses: actions/docker/login@8cdf801b322af5f369e00d85e9cf3a7122f49108
-        env:
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build Image
-        uses: actions/docker/cli@8cdf801b322af5f369e00d85e9cf3a7122f49108
-        with:
-          args: build -t lichtblau/kraggl:develop .
+        run: docker build -t lichtblau/kraggl:develop .
       - name: Push Image
-        uses: actions/docker/cli@8cdf801b322af5f369e00d85e9cf3a7122f49108
-        with:
-          args: push lichtblau/kraggl:develop
+        run: docker push lichtblau/kraggl:develop
       - name: Deploy Develop
         uses: maddox/actions/ssh@6fc6694b013badc932fb2a6ec6edfa4e629254cf
         env:
