@@ -5,7 +5,7 @@ With detailed time entry descriptions and tags depending of the state your task 
 
 ## Getting started
 
-Head over to [Kraggl](https://kraggl.lichtblau.io).
+Head over to [Kraggl](https://kraggl.com).
 
 Or get the Express server running locally:
 
