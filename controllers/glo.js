@@ -2,7 +2,7 @@ const authHelper = require('../helpers/auth');
 const timeHelper = require('../helpers/time');
 
 const COMMENT_HEADER = '# Time Summary\n\n';
-const COMMENT_FOOTER = '\n\nPowered By: [Kraggl](https://kraggl.lichtblau.io)';
+const COMMENT_FOOTER = '\n\nPowered By: [Kraggl](https://kraggl.com)';
 
 const isColumnTracked = (columnId, board) => board.Columns.map(col => col.id).includes(columnId);
 
