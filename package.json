@@ -26,6 +26,6 @@
     "sequelize-cli": "^5.5.1",
     "serve-favicon": "^2.5.0",
     "sqlite3": "^4.1.1",
-    "toggl-api": "git+https://github.com/mlichtblau/node-toggl-api.git"
+    "toggl-api": "git+https://github.com/mlichtblau/node-toggl-api.git#f3bef038336d65007dbeb22454f3005797b78e04"
   }
 }
