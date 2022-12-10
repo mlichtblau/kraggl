@@ -12,7 +12,7 @@
     "cookie-parser": "^1.4.5",
     "debug": "~4.1.1",
     "ejs": "~3.0.1",
-    "express": "~4.17.1",
+    "express": "~4.17.3",
     "express-flash": "0.0.2",
     "express-session": "^1.17.0",
     "glo-board-api-node": "git+https://github.com/mlichtblau/glo-board-api-node.git",
