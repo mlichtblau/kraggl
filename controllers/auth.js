@@ -55,7 +55,8 @@ const gitKrakenCallback = function (req, res, next) {
         })
     })
     .catch(error => {
-      // TODO: Handle error
+      console.log(error);
+      return next(error);
     })
 };
 
